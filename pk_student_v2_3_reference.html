@@ -1,0 +1,2375 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>PK STUDENT v2.4 · ห้อง 5/4</title>
+<meta name="theme-color" content="#6366f1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="pk STUDENT">
+
+<!-- PWA Web App Manifest -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"pk STUDENT v2.3","short_name":"pkSTUDENT","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#6366f1","icons":[{"src":"https://placehold.co/192x192/6366f1/ffffff?text=pk2.3","sizes":"192x192","type":"image/png"},{"src":"https://placehold.co/512x512/6366f1/ffffff?text=pkSTUDENT","sizes":"512x512","type":"image/png"}]}'>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+  :root{
+    --bg-grad-1: #eef2ff;
+    --bg-grad-2: #f0fdf4;
+    --bg-grad-3: #fefce8;
+    --card: rgba(255, 255, 255, 0.85);
+    --card-solid: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: rgba(226, 232, 240, 0.8);
+    --border-hover: #cbd5e1;
+    
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: rgba(99, 102, 241, 0.12);
+    --accent: #f59e0b;
+    --hl: #fde047;
+    
+    --high: #ef4444;
+    --mid: #f59e0b;
+    --low: #10b981;
+    
+    --ink: #1e1b4b;
+    --on-ink: #ffffff;
+    --rule: rgba(99, 102, 241, 0.08);
+    
+    --glass-bg: rgba(255, 255, 255, 0.82);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.12);
+    
+    --r: 16px;
+    --r-sm: 12px;
+    --r-lg: 24px;
+    --bottom-nav-height: 68px;
+  }
+
+  [data-theme="dark"]{
+    --bg-grad-1: #0f172a;
+    --bg-grad-2: #1e1b4b;
+    --bg-grad-3: #022c22;
+    --card: rgba(30, 41, 59, 0.82);
+    --card-solid: #1e293b;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --border: rgba(51, 65, 85, 0.8);
+    --border-hover: #475569;
+    
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --primary-light: rgba(129, 140, 248, 0.18);
+    
+    --high: #f87171;
+    --mid: #fbbf24;
+    --low: #34d399;
+    
+    --ink: #312e81;
+    --on-ink: #ffffff;
+    --rule: rgba(129, 140, 248, 0.1);
+    
+    --glass-bg: rgba(30, 41, 59, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0; -webkit-tap-highlight-color: transparent;}
+  
+  body{
+    font-family:'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: radial-gradient(circle at 0% 0%, var(--bg-grad-1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, var(--bg-grad-2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, var(--bg-grad-3) 0%, transparent 50%),
+                var(--bg-grad-1);
+    background-attachment: fixed;
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.6;
+    transition:background 0.4s ease, color 0.4s ease;
+    padding-bottom: calc(var(--bottom-nav-height) + 36px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button{font-family:inherit;cursor:pointer;border:none;transition:all 0.2s cubic-bezier(0.4, 0, 0.2, 1); touch-action: manipulation;}
+  :focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+  
+  input,select,textarea{
+    font-family:inherit;
+    font-size:16px;
+    width:100%;
+    padding:14px 16px;
+    border:1.5px solid var(--border);
+    border-radius:var(--r-sm);
+    background:var(--card-solid);
+    color:var(--text);
+    outline:none;
+    transition:all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    min-height: 48px;
+  }
+  input:focus,select:focus,textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 4px var(--primary-light);
+  }
+  textarea{resize:vertical;min-height:100px}
+  
+  .hidden{display:none!important}
+  .muted{color:var(--muted)}
+  .b{font-weight:600}
+  .grow{flex:1;min-width:0}
+  .container{max-width:860px;margin:0 auto;padding:16px 16px}
+
+  /* BUTTONS & TOUCH TARGETS */
+  .btn{
+    padding:14px 22px;
+    border-radius:var(--r-sm);
+    font-weight:600;
+    font-size:15.5px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    box-shadow:var(--shadow-sm);
+    letter-spacing: 0.01em;
+    min-height: 48px;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+  .btn:active{transform:translateY(1px);scale:0.98}
+  
+  .btn-primary{
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color:#ffffff;
+  }
+  [data-theme="dark"] .btn-primary{
+    background: linear-gradient(135deg, var(--primary), #6366f1);
+    color:#0f172a;
+    font-weight:700;
+  }
+  
+  .btn-ghost{
+    background:var(--glass-bg);
+    color:var(--text);
+    border:1.5px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover{
+    border-color:var(--primary);
+    color:var(--primary);
+    background:var(--primary-light);
+  }
+  
+  .btn-danger{
+    background:rgba(239, 68, 68, 0.08);
+    color:var(--high);
+    border:1.5px solid rgba(239, 68, 68, 0.3);
+  }
+  .btn-danger:hover{ background:var(--high); color:#fff; }
+  
+  .btn-line{background:#06c755;color:#fff;font-weight:600}
+  .btn-line:hover{background:#05b34c;box-shadow:0 4px 12px rgba(6, 199, 85, 0.3)}
+  .btn-block{width:100%}
+  
+  .icon-btn{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    background:var(--glass-bg);
+    border:1.5px solid var(--border);
+    font-size:19px;
+    color:var(--text);
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+  }
+  .icon-btn:hover{
+    border-color:var(--primary);
+    color:var(--primary);
+    transform:translateY(-2px);
+  }
+  
+  .mini{
+    background:transparent;
+    font-size:16px;
+    min-width:44px;
+    min-height:44px;
+    display:inline-grid;
+    place-items:center;
+    border-radius:10px;
+    opacity:.85;
+    color:var(--text);
+  }
+  .mini:hover,.mini:active{
+    opacity:1;
+    background:var(--primary-light);
+    color:var(--primary);
+  }
+
+  /* PROFILE SCREEN */
+  .center{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding-top:48px;
+    max-width:680px;
+  }
+  .top-right{position:absolute;top:16px;right:16px;z-index:5}
+  
+  .brand{
+    font-size:48px;
+    font-weight:800;
+    letter-spacing:-0.03em;
+    line-height:1.15;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom:10px;
+  }
+  [data-theme="dark"] .brand{
+    background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 50%, #f472b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .profile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:14px;
+    margin:28px 0;
+    width:100%;
+  }
+  
+  .profile-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    background:var(--glass-bg);
+    border:1.5px solid var(--glass-border);
+    border-radius:var(--r);
+    padding:20px 14px;
+    color:var(--text);
+    box-shadow:var(--glass-shadow);
+    backdrop-filter: blur(12px);
+  }
+  .profile-card:hover, .profile-card:active{
+    border-color:var(--primary);
+    transform:translateY(-3px);
+  }
+  .profile-card.add{
+    border:2px dashed var(--muted);
+    background:rgba(255, 255, 255, 0.15);
+    justify-content:center;
+  }
+  
+  .pname{font-weight:700;font-size:16px;word-break:break-word;margin-top:6px}
+  .psub{font-size:12.5px;color:var(--muted);margin-top:2px;font-weight:500}
+  
+  .avatar{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:var(--card-solid);
+    border:2.5px solid var(--border);
+    display:grid;
+    place-items:center;
+    font-size:28px;
+    margin:0 0 4px;
+    box-shadow: var(--shadow-sm);
+  }
+  .avatar.sm{width:44px;height:44px;font-size:22px;margin:0;flex-shrink:0;border-width:2px}
+
+  /* HEADER */
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+    background:var(--glass-bg);
+    padding:14px 16px;
+    border-radius:var(--r);
+    border:1.5px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    box-shadow:var(--glass-shadow);
+  }
+  .user{display:flex;align-items:center;gap:12px;min-width:0}
+  .user h2{font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .user small{color:var(--muted);font-size:12.5px;font-weight:500}
+  .actions{display:flex;gap:8px}
+
+  /* PROGRESS CARD */
+  .progress-card{
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 60%, #6366f1 100%);
+    color:#ffffff;
+    border-radius:var(--r-lg);
+    padding:22px 20px;
+    margin-bottom:16px;
+    box-shadow: 0 15px 30px -10px rgba(67, 56, 202, 0.4);
+  }
+  .progress-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;}
+  .pct{font-size:46px;font-weight:800;line-height:1;letter-spacing:-0.02em}
+  .bar{height:12px;background:rgba(255,255,255,0.22);border-radius:8px;overflow:hidden;margin:14px 0 10px;}
+  .bar-fill{
+    height:100%;
+    width:0;
+    background: linear-gradient(90deg, #fde047 0%, #fbbf24 100%);
+    border-radius:8px;
+    transition:width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* STATS CARDS */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .stat{
+    padding:14px 8px;
+    text-align:center;
+    background:var(--glass-bg);
+    border:1.5px solid var(--glass-border);
+    border-radius:var(--r);
+    backdrop-filter: blur(12px);
+    box-shadow:var(--shadow-sm);
+  }
+  .stat .num{font-size:26px;font-weight:800;line-height:1.2}
+  .stat .lbl{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+
+  /* CARDS GENERAL */
+  .card{
+    background:var(--glass-bg);
+    border:1.5px solid var(--glass-border);
+    border-radius:var(--r);
+    padding:18px 16px;
+    margin-bottom:14px;
+    backdrop-filter: blur(12px);
+    box-shadow:var(--glass-shadow);
+  }
+  
+  .quote{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    border-left:5px solid var(--accent);
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.08) 0%, transparent 100%);
+  }
+  .quote-text{flex:1;font-size:14px;font-weight:500;font-style:italic}
+  
+  .due-alert{
+    border-left:5px solid var(--high);
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.08) 0%, transparent 100%);
+  }
+  .due-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:13.5px;
+  }
+  .due-row:last-child{border-bottom:none}
+  .due-row span:first-child{min-width:0;word-break:break-word;font-weight:500}
+  .due-tag{flex-shrink:0;font-weight:700;font-size:12px;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,0.5)}
+
+  .announce-item{
+    padding:12px 14px;
+    background:var(--card-solid);
+    border-left:4px solid var(--primary);
+    border-radius:var(--r-sm);
+    margin-top:10px;
+    font-size:13.5px;
+    white-space:pre-wrap;
+    word-break:break-word;
+    box-shadow:var(--shadow-sm);
+  }
+  .announce-item small{display:block;color:var(--muted);margin-top:4px;font-weight:500}
+  
+  .section-title{
+    font-weight:700;
+    font-size:19px;
+    margin:24px 0 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  /* FILTERS & CHIPS */
+  .filters{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+  .filter-row{display:flex;gap:10px}
+  .filter-row select{max-width:160px}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-behavior: smooth;-webkit-overflow-scrolling: touch;}
+  .chips::-webkit-scrollbar{display:none}
+  
+  .chip{
+    padding:8px 18px;
+    border-radius:24px;
+    background:var(--glass-bg);
+    border:1.5px solid var(--border);
+    color:var(--muted);
+    white-space:nowrap;
+    font-size:13.5px;
+    font-weight:600;
+    backdrop-filter: blur(8px);
+    min-height: 40px;
+    display:inline-flex;
+    align-items:center;
+  }
+  .chip.active{
+    background:var(--primary);
+    color:#ffffff;
+    border-color:var(--primary);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+  [data-theme="dark"] .chip.active{color:#0f172a}
+
+  /* TASKS LIST */
+  .task{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:var(--glass-bg);
+    border:1.5px solid var(--glass-border);
+    border-left:6px solid var(--low);
+    border-radius:var(--r);
+    padding:16px;
+    margin-bottom:12px;
+    backdrop-filter: blur(12px);
+    box-shadow:var(--shadow-sm);
+  }
+  .task.p-high{border-left-color:var(--high)}
+  .task.p-medium{border-left-color:var(--mid)}
+  .task.done{opacity:.55}
+  .task.done .task-title{text-decoration:line-through;color:var(--muted)}
+  .task.pop{animation:pop 0.35s ease}
+  @keyframes pop{40%{transform:scale(1.02)}}
+  
+  .check{
+    flex-shrink:0;
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    border:2px solid var(--muted);
+    background:var(--card-solid);
+    color:transparent;
+    font-weight:800;
+    font-size:18px;
+    margin-top:2px;
+    display:grid;
+    place-items:center;
+  }
+  .check.checked{background:var(--low);border-color:var(--low);color:#fff}
+  
+  .task-body{flex:1;min-width:0}
+  .task-top{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  
+  .tag{
+    font-size:11.5px;
+    padding:3px 9px;
+    border-radius:16px;
+    font-weight:600;
+    border:1px solid transparent;
+  }
+  .tag.subject{
+    background:var(--primary-light);
+    color:var(--primary);
+  }
+  .tag.high{background:rgba(239, 68, 68, 0.12);color:var(--high)}
+  .tag.medium{background:rgba(245, 158, 11, 0.14);color:var(--mid)}
+  .tag.low{background:rgba(16, 185, 129, 0.14);color:var(--low)}
+  .tag.shared{background:var(--hl);color:#1e1b4b;font-weight:700}
+  
+  .task-title{font-weight:700;font-size:15.5px;word-break:break-word;line-height:1.4}
+  .task-note{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:6px;
+    white-space:pre-wrap;
+    word-break:break-word;
+    background:var(--card-solid);
+    padding:8px 10px;
+    border-radius:var(--r-sm);
+    border:1px solid var(--border);
+  }
+  .task-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    text-decoration: none;
+  }
+  .due{font-size:12.5px;color:var(--muted);margin-top:6px;display:inline-block;font-weight:600}
+  .due.overdue{color:var(--high)}
+  .due.today,.due.soon{color:var(--mid)}
+  .task-actions{display:flex;flex-direction:column;gap:4px}
+  .empty{text-align:center;color:var(--muted);padding:36px 16px;line-height:1.8;border:1.5px dashed var(--border);border-radius:var(--r)}
+
+  /* CALENDAR STYLING */
+  .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+  .cal-day-name{font-size:12px;font-weight:700;color:var(--muted);padding-bottom:6px}
+  .cal-cell{
+    min-height:52px;
+    background:var(--card-solid);
+    border:1px solid var(--border);
+    border-radius:var(--r-sm);
+    padding:4px;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    cursor:pointer;
+    position:relative;
+  }
+  .cal-cell:hover{border-color:var(--primary)}
+  .cal-cell.other-month{opacity:0.3}
+  .cal-cell.today{border:2px solid var(--primary);background:var(--primary-light)}
+  .cal-cell.selected{box-shadow:0 0 0 3px var(--primary)}
+  .cal-dots{display:flex;gap:3px;margin-top:4px;flex-wrap:wrap;justify-content:center}
+  .cal-dot{width:6px;height:6px;border-radius:50%}
+  .cal-dot.high{background:var(--high)}
+  .cal-dot.medium{background:var(--mid)}
+  .cal-dot.low{background:var(--low)}
+
+  /* POMODORO TIMER STYLING (NEW v2.3) */
+  .pomo-card {
+    text-align: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(245,158,11,0.05));
+  }
+  .pomo-timer-display {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    margin: 12px 0;
+    color: var(--primary);
+    text-shadow: 0 4px 12px rgba(99,102,241,0.2);
+  }
+  .pomo-mode-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+  .pomo-mode-badge.break {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--low);
+  }
+  .pomo-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  /* BADGES & ACHIEVEMENTS STYLING (NEW v2.3) */
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .badge-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 14px 10px;
+    background: var(--card-solid);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-sm);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    opacity: 0.5;
+    filter: grayscale(80%);
+    transition: all 0.3s ease;
+  }
+  .badge-card.unlocked {
+    opacity: 1;
+    filter: grayscale(0%);
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--card-solid), rgba(245, 158, 11, 0.06));
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+  }
+  .badge-icon {
+    font-size: 34px;
+    margin-bottom: 6px;
+  }
+  .badge-name {
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+  .badge-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  /* BOTTOM NAVIGATION FOR MOBILE */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1.5px solid var(--glass-border);
+    z-index: 90;
+    padding: 6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -5px 25px rgba(0,0,0,0.06);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    background: transparent;
+    padding: 6px 10px;
+    border-radius: 12px;
+    gap: 2px;
+    min-width: 52px;
+  }
+  .nav-item .icon { font-size: 19px; }
+  .nav-item.active, .nav-item:active { color: var(--primary); }
+
+  /* FAB BUTTON */
+  .fab{
+    position:fixed;
+    right:20px;
+    bottom: calc(var(--bottom-nav-height) + 16px);
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    font-size:32px;
+    color:#ffffff;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    border:none;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+    z-index:80;
+    display:grid;
+    place-items:center;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .fab:active{transform:scale(0.92)}
+  [data-theme="dark"] .fab{
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    color:#0f172a;
+  }
+
+  /* MODALS & BOTTOM SHEET */
+  .modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:100;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal.open{opacity:1;visibility:visible;pointer-events:auto}
+  
+  .modal-box{
+    background:var(--card-solid);
+    width:100%;
+    max-width:520px;
+    border-radius:24px 24px 0 0;
+    border-top:5px solid var(--primary);
+    padding:20px 20px 32px;
+    max-height:88vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow:var(--shadow-lg);
+    position: relative;
+  }
+  .modal-box::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    margin: 0 auto 16px;
+  }
+  .modal.open .modal-box{transform:translateY(0)}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .modal-head h3{font-size:19px;font-weight:700}
+  
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  
+  .prio-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .prio-pick button{
+    padding:12px 8px;
+    border-radius:var(--r-sm);
+    background:var(--card-solid);
+    border:1.5px solid var(--border);
+    color:var(--text);
+    font-size:13.5px;
+    font-weight:600;
+    min-height:48px;
+  }
+  .prio-pick button.sel[data-p="high"]{border-color:var(--high);background:rgba(239,68,68,.12);color:var(--high)}
+  .prio-pick button.sel[data-p="medium"]{border-color:var(--mid);background:rgba(245,158,11,.14);color:var(--mid)}
+  .prio-pick button.sel[data-p="low"]{border-color:var(--low);background:rgba(16,185,129,.14);color:var(--low)}
+  
+  .btn-row{display:flex;gap:10px;margin-top:12px}
+  .btn-row .btn{flex:1}
+
+  .tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:16px;padding-bottom:4px}
+  .list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .list-row:last-child{border-bottom:none}
+  .avatar-pick{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .avatar-pick button{font-size:22px;width:44px;height:44px;border-radius:var(--r-sm);background:var(--bg-grad-1);border:2px solid transparent}
+  .avatar-pick button.sel{border-color:var(--primary)}
+  .mini-bar{height:6px;background:var(--border);border-radius:2px;overflow:hidden;margin:8px 0 4px}
+  .mini-bar div{height:100%;background:var(--low)}
+  .row-form{display:flex;gap:8px}
+
+  /* TOASTS */
+  .toast-box{
+    position:fixed;
+    top:16px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:200;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+    max-width:92vw;
+    pointer-events:none;
+  }
+  .toast{
+    background:var(--ink);
+    color:var(--on-ink);
+    padding:12px 20px;
+    border-radius:var(--r-sm);
+    font-size:13.5px;
+    font-weight:600;
+    border-left:5px solid var(--low);
+    box-shadow:var(--shadow-md);
+    animation:toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .toast.error{border-left-color:var(--high)}
+  .toast.info{border-left-color:var(--primary)}
+  .toast.hide{opacity:0;transform:translateY(-10px)}
+  @keyframes toastIn{from{opacity:0;transform:translateY(-10px)}}
+
+  /* RESPONSIVE DESKTOP OVERRIDES */
+  @media(min-width:640px){
+    body { padding-bottom: 40px; }
+    .bottom-nav { display: none !important; }
+    .fab { bottom: 28px; right: 28px; }
+    .modal{ align-items:center }
+    .modal-box{ border-radius:24px; transform:scale(0.92); opacity:0; }
+    .modal-box::before { display: none; }
+    .modal.open .modal-box{ transform:scale(1); opacity:1; }
+  }
+  @media(max-width:639px){
+    .bottom-nav { display: flex; }
+    .header .actions { display: none; }
+    .filter-row { flex-direction: column; }
+    .filter-row select { max-width: 100%; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ===== mobile-first ===== */
+  body{min-height:100dvh;overscroll-behavior-y:none}
+  body.lock{overflow:hidden}
+  #appScreen .container{padding-top:calc(env(safe-area-inset-top,0px) + 12px)}
+  #appScreen .header{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:50}
+  .modal-box{max-height:90dvh;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain}
+  .sel-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .swipe-hint{display:none;font-size:12px;margin:-6px 0 10px;text-align:center}
+  .task{touch-action:pan-y;transition:transform .2s,background .2s}
+  .task.swiping{transition:none}
+  .task.sw-r{background:rgba(16,185,129,.22)}
+  .task.sw-l{background:rgba(239,68,68,.2)}
+  .nav-add{width:54px;height:54px;border-radius:50%;margin-top:-26px;font-size:32px;color:#fff;
+    background:linear-gradient(135deg,var(--primary),var(--primary-hover));box-shadow:0 8px 20px -4px rgba(99,102,241,.55);
+    display:grid;place-items:center;flex-shrink:0}
+  [data-theme="dark"] .nav-add{color:#0f172a}
+  .nav-add:active{transform:scale(.92)}
+  .menu-item{display:flex;align-items:center;gap:12px;width:100%;padding:14px 8px;border-radius:12px;
+    background:transparent;color:var(--text);font-size:16px;font-weight:600;text-align:left;min-height:52px}
+  .menu-item:active{background:var(--primary-light)}
+  .menu-item .icon{font-size:22px;width:32px;text-align:center}
+  .rank{width:26px;text-align:center;font-weight:700;flex-shrink:0}
+  .list-row.me{background:var(--primary-light);border-radius:var(--r-sm);padding-left:8px;padding-right:8px}
+  @media(hover:none){
+    .btn:hover,.icon-btn:hover,.profile-card:hover{transform:none;box-shadow:var(--shadow-sm)}
+  }
+  @media(max-width:639px){
+    .fab{display:none}
+    .swipe-hint{display:block}
+    .cal-header .icon-btn{width:44px;height:44px}
+    .chips{margin-left:-4px;margin-right:-4px;padding:0 4px 6px}
+    .center{padding-top:calc(env(safe-area-inset-top,0px) + 56px)}
+    .brand{font-size:40px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .avatar{overflow:hidden}
+  .avatar img,.avatar-pick button img{width:100%;height:100%;object-fit:cover;display:block}
+  .avatar-pick button{overflow:hidden;padding:0}
+  .avatar-pick button.upload{border:2px dashed var(--muted)}
+  .avatar-pick button.upload.sel{border:2px solid var(--primary)}
+  #userAvatar{cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- PK STUDENT v2.4 · ห้อง 5/4 -->
+<!-- ========== หน้าเลือกโปรไฟล์ ========== -->
+<section id="profileScreen">
+  <div class="top-right"><button class="icon-btn theme-toggle" data-action="theme" title="สลับธีม">🌙</button></div>
+  <div class="container center">
+    <h1 class="brand">pk STUDENT</h1>
+    <p class="muted">ติดตามงานค้างของห้อง 5/4 แล้วช่วยกันส่งให้ทัน<br>เลือกโปรไฟล์ หรือกด "เพิ่มโปรไฟล์" เพื่อเริ่มต้น</p>
+    <div id="profileGrid" class="profile-grid"></div>
+    <button class="btn btn-ghost" data-action="open-admin-login">🔐 เข้าสู่ระบบแอดมิน</button>
+  </div>
+</section>
+
+<!-- ========== หน้าหลักผู้ใช้ ========== -->
+<section id="appScreen" class="hidden">
+  <div class="container">
+    <div class="header">
+      <div class="user">
+        <div class="avatar sm" id="userAvatar" data-action="pick-photo" data-target="me" role="button" title="แตะเพื่อเปลี่ยนรูปโปรไฟล์"></div>
+        <div class="grow">
+          <h2 id="userGreeting"></h2>
+          <small id="todayText"></small>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" data-action="open-sync" title="ซิงก์ Cloud / รหัสห้อง">☁️</button>
+        <button class="icon-btn" data-action="share" title="แชร์สรุปไป LINE">💬</button>
+        <button class="icon-btn theme-toggle" data-action="theme" title="สลับธีม">🌙</button>
+        <button class="icon-btn" data-action="logout" title="เปลี่ยนโปรไฟล์">🔄</button>
+      </div>
+    </div>
+
+    <!-- แผงสลับโหมดมุมมอง (รายการงาน / ปฏิทิน / Pomodoro / สถิติ) -->
+    <div class="chips" style="margin-bottom: 12px;">
+      <button class="chip active" id="viewTasksBtn" onclick="switchMainView('tasks')">📝 รายการงาน</button>
+      <button class="chip" id="viewCalBtn" onclick="switchMainView('calendar')">📅 ปฏิทิน</button>
+      <button class="chip" id="viewPomoBtn" onclick="switchMainView('pomo')">🍅 จับเวลาอ่านหนังสือ</button>
+      <button class="chip" id="viewStatsBtn" onclick="switchMainView('stats')">📊 สถิติ &amp; เหรียญ</button>
+    </div>
+
+    <!-- มุมมองปฏิทิน (Calendar View Section) -->
+    <div id="calendarSection" class="card hidden">
+      <div class="cal-header">
+        <button class="icon-btn" onclick="changeCalMonth(-1)" aria-label="เดือนก่อน">◀</button>
+        <h3 id="calMonthTitle" style="font-size:17px;font-weight:700"></h3>
+        <button class="icon-btn" onclick="changeCalMonth(1)" aria-label="เดือนถัดไป">▶</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-day-name">อา</div><div class="cal-day-name">จ</div><div class="cal-day-name">อ</div>
+        <div class="cal-day-name">พ</div><div class="cal-day-name">พฤ</div><div class="cal-day-name">ศ</div><div class="cal-day-name">ส</div>
+      </div>
+      <div class="cal-grid" id="calCells"></div>
+      <div id="calDayTaskList" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- มุมมอง Pomodoro Timer (NEW v2.3) -->
+    <div id="pomoSection" class="card pomo-card hidden">
+      <div class="pomo-mode-badge" id="pomoModeBadge">🎯 โหมดโฟกัสอ่านหนังสือ (25 นาที)</div>
+      <div class="pomo-timer-display" id="pomoDisplay">25:00</div>
+      <p class="muted" style="font-size:13.5px;" id="pomoSub">อ่านหนังสือแบบต่อเนื่องโดยไม่วอกแวกสะสมสมาธิกัน!</p>
+      <div class="pomo-controls">
+        <button class="btn btn-primary" id="pomoStartBtn" onclick="togglePomodoro()">▶️ เริ่มจับเวลา</button>
+        <button class="btn btn-ghost" onclick="resetPomodoro()">🔄 รีเซ็ต</button>
+      </div>
+      <div style="margin-top:16px;font-weight:600;font-size:13px;color:var(--primary)" id="pomoStatsText">
+        🍅 สะสมสมาธิแล้ว 0 รอบ (0 นาที)
+      </div>
+    </div>
+
+    <div id="statsSection" class="hidden"></div>
+
+    <!-- มุมมองรายการงาน (Tasks View Section) -->
+    <div id="tasksSection">
+      <div class="progress-card">
+        <div class="progress-top">
+          <div>
+            <div style="opacity:.9;font-size:13.5px;font-weight:500">ความคืบหน้าทั้งหมด</div>
+            <div class="pct" id="pctText">0%</div>
+          </div>
+          <div style="text-align:right;font-size:13.5px;opacity:.95;font-weight:500" id="progressMsg"></div>
+        </div>
+        <div class="bar"><div class="bar-fill" id="progressFill"></div></div>
+        <div style="font-size:12.5px;opacity:.9;font-weight:500" id="progressSub"></div>
+      </div>
+    <!-- แผงสลับโหมดมุมมอง (รายการงาน / ปฏิทิน / Pomodoro / ร้านค้าแลกรางวัล / สถิติ) -->
+    <div class="chips" style="margin-bottom: 12px;">
+      <button class="chip active" id="viewTasksBtn" onclick="switchMainView('tasks')">📝 รายการงาน</button>
+      <button class="chip" id="viewCalBtn" onclick="switchMainView('calendar')">📅 ปฏิทิน</button>
+      <button class="chip" id="viewPomoBtn" onclick="switchMainView('pomo')">🍅 จับเวลาอ่านหนังสือ</button>
+      <button class="chip" id="viewShopBtn" onclick="switchMainView('shop')">🎁 ร้านค้าแลกรางวัล</button>
+      <button class="chip" id="viewStatsBtn" onclick="switchMainView('stats')">📊 สถิติ &amp; เหรียญ</button>
+    </div>
+
+    <!-- มุมมองปฏิทิน (Calendar View Section) -->
+    <div id="calendarSection" class="card hidden">
+<!-- ... existing code -->
+    <!-- มุมมอง Pomodoro Timer (NEW v2.3) -->
+    <div id="pomoSection" class="card pomo-card hidden">
+      <div class="pomo-mode-badge" id="pomoModeBadge">🎯 โหมดโฟกัสอ่านหนังสือ (25 นาที)</div>
+      <div class="pomo-timer-display" id="pomoDisplay">25:00</div>
+      <p class="muted" style="font-size:13.5px;" id="pomoSub">อ่านหนังสือแบบต่อเนื่องโดยไม่วอกแวกสะสมสมาธิกัน!</p>
+      <div class="pomo-controls">
+        <button class="btn btn-primary" id="pomoStartBtn" onclick="togglePomodoro()">▶️ เริ่มจับเวลา</button>
+        <button class="btn btn-ghost" onclick="resetPomodoro()">🔄 รีเซ็ต</button>
+      </div>
+      <div style="margin-top:16px;font-weight:600;font-size:13px;color:var(--primary)" id="pomoStatsText">
+        🍅 สะสมสมาธิแล้ว 0 รอบ (0 นาที)
+      </div>
+    </div>
+
+    <!-- มุมมองร้านค้าแลกของรางวัล & PK Points (NEW v2.3) -->
+    <div id="shopSection" class="hidden">
+      <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(99, 102, 241, 0.15)); text-align:center; padding:20px;">
+        <div style="font-size:14px; font-weight:600; color:var(--muted)">คะแนนสะสมของคุณ</div>
+        <div style="font-size:42px; font-weight:800; color:var(--accent); line-height:1.2;" id="userPointsDisplay">🪙 0</div>
+        <div style="font-size:12.5px; color:var(--muted); margin-top:4px">สะสมแต้มจากการทำการบ้าน (+10) และอ่านหนังสือ Pomodoro (+15)</div>
+      </div>
+
+      <div class="section-title"><span>🛍️ ของรางวัลที่แลกได้</span></div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px;" id="rewardsGrid"></div>
+
+      <div class="section-title" style="margin-top:24px;"><span>🎟️ คลังคูปองส่วนตัว</span></div>
+      <div class="card" id="myCouponsList"></div>
+    </div>
+
+    <div id="statsSection" class="hidden"></div>
+
+    <!-- มุมมองรายการงาน (Tasks View Section) -->
+<!-- ... existing code -->
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="navTasks" onclick="switchMainView('tasks')"><span class="icon">📝</span><span>งานค้าง</span></button>
+    <button class="nav-item" id="navCal" onclick="switchMainView('calendar')"><span class="icon">📅</span><span>ปฏิทิน</span></button>
+    <button class="nav-add" data-action="add-task" aria-label="เพิ่มงาน">+</button>
+    <button class="nav-item" id="navPomo" onclick="switchMainView('pomo')"><span class="icon">🍅</span><span>จับเวลา</span></button>
+    <button class="nav-item" id="navShop" onclick="switchMainView('shop')"><span class="icon">🎁</span><span>ร้านค้า</span></button>
+  </nav>
+</section>
+
+<!-- ========== หน้าแอดมิน ========== -->
+<section id="adminScreen" class="hidden">
+  <div class="container">
+    <div class="header">
+      <div class="user">
+        <div class="avatar sm">🛡️</div>
+        <div><h2>แผงควบคุมแอดมิน</h2><small>จัดการสมาชิก งาน และประกาศ</small></div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn theme-toggle" data-action="theme">🌙</button>
+        <button class="icon-btn" data-action="exit-admin" title="ออกจากระบบแอดมิน">🚪</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="chip active" data-action="tab" data-tab="members">👥 สมาชิก</button>
+      <button class="chip" data-action="tab" data-tab="shared">📢 ประกาศงาน</button>
+      <button class="chip" data-action="tab" data-tab="news">📣 ประกาศข่าว</button>
+      <button class="chip" data-action="tab" data-tab="settings">⚙️ ตั้งค่า</button>
+    </div>
+
+    <div class="tab-panel" data-panel="members">
+      <div class="card">
+        <div class="b" style="margin-bottom:10px">➕ เพิ่มสมาชิกใหม่</div>
+        <form id="profileForm">
+          <input id="newProfileName" placeholder="ชื่อเล่น / ชื่อสมาชิก" maxlength="30">
+          <div class="avatar-pick" data-avatar-pick></div>
+          <button class="btn btn-primary btn-block" type="submit">เพิ่มสมาชิก</button>
+        </form>
+      </div>
+      <div class="card"><div class="b">รายชื่อสมาชิก</div><div id="memberList"></div></div>
+    </div>
+
+    <div class="tab-panel hidden" data-panel="shared">
+      <button class="btn btn-primary btn-block" data-action="add-shared" style="margin-bottom:14px">📢 ประกาศงานให้ทุกคน</button>
+      <div class="card"><div class="b">งานที่ประกาศแล้ว</div><div id="sharedList"></div></div>
+    </div>
+
+    <div class="tab-panel hidden" data-panel="news">
+      <div class="card">
+        <form id="announceForm">
+          <textarea id="announceText" placeholder="เช่น พรุ่งนี้สอบย่อยคณิต บทที่ 3 อย่าลืมเอาเครื่องคิดเลขมานะ!" maxlength="500"></textarea>
+          <button class="btn btn-primary btn-block" type="submit" style="margin-top:10px">โพสต์ประกาศ</button>
+        </form>
+      </div>
+      <div class="card"><div class="b">ประกาศทั้งหมด</div><div id="announceList"></div></div>
+    </div>
+
+    <div class="tab-panel hidden" data-panel="settings">
+      <div class="card">
+        <div class="b" style="margin-bottom:6px">💾 สำรอง / กู้คืนข้อมูล</div>
+        <p class="muted" style="font-size:13.5px;margin-bottom:10px">กด "สร้างข้อมูลสำรอง" แล้วคัดลอกข้อความไปเก็บไว้ เมื่ออยากกู้คืน ให้วางข้อความลงช่องนี้แล้วกด "กู้คืนข้อมูล"</p>
+        <textarea id="backupText" placeholder="ข้อความสำรองข้อมูลจะแสดงที่นี่ / วางข้อความที่เคยสำรองไว้เพื่อกู้คืน" spellcheck="false"></textarea>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-primary grow" data-action="export-data">📤 สร้างข้อมูลสำรอง</button>
+          <button class="btn btn-ghost grow" data-action="import-data">📥 กู้คืนข้อมูล</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost grow" data-action="export-file">⬇️ ดาวน์โหลดไฟล์</button>
+          <button class="btn btn-ghost grow" data-action="pick-file">📂 เลือกไฟล์กู้คืน</button>
+          <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+        </div>
+        <p class="muted" id="dbInfo" style="font-size:12.5px;margin-top:10px"></p>
+      </div>
+      <div class="card">
+        <div class="b" style="margin-bottom:10px">🔑 เปลี่ยนรหัสผ่านแอดมิน</div>
+        <form id="passForm" class="row-form">
+          <input type="password" id="newPass" placeholder="รหัสผ่านใหม่ (อย่างน้อย 4 ตัว)">
+          <button class="btn btn-primary" type="submit">บันทึก</button>
+        </form>
+      </div>
+      <div class="card">
+        <div class="b" style="margin-bottom:6px">🗑️ ล้างข้อมูลทั้งหมด</div>
+        <p class="muted" style="font-size:13.5px;margin-bottom:10px">ลบสมาชิก งาน และประกาศทั้งหมด (กู้คืนไม่ได้)</p>
+        <button class="btn btn-danger btn-block" data-action="reset-all">ล้างข้อมูลทั้งหมด</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Modal: รหัสห้อง 5/4 ========== -->
+<div class="modal" id="syncModal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-head"><h3>🏫 รหัสห้อง 5/4</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <div style="margin-bottom:16px;">
+      <p class="muted" style="font-size:13.5px;margin-bottom:12px;">ตั้งรหัสประจำห้องสำหรับอ้างอิงบนอุปกรณ์นี้ ข้อมูลยังไม่ถูกส่งหรือซิงก์ไปยังอุปกรณ์อื่น</p>
+      <div class="field">
+        <label>รหัสห้องเรียน (Room Code)</label>
+        <input type="text" id="roomCodeInput" placeholder="เช่น CLASS-601" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="connectCloudRoom()">บันทึกรหัสห้อง</button>
+        <button class="btn btn-ghost" onclick="generateNewRoomCode()">🎲 สุ่มรหัสใหม่</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0;background:var(--primary-light)">
+      <div style="font-size:13px;font-weight:600;" id="cloudSyncStatus">สถานะ: ใช้ข้อมูลในอุปกรณ์นี้เท่านั้น</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Modal: สร้างโปรไฟล์ ========== -->
+<div class="modal" id="profileModal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-head"><h3>👋 สร้างโปรไฟล์ใหม่</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <form id="quickProfileForm">
+      <div class="field"><label>ชื่อเล่น</label><input id="quickProfileName" placeholder="เช่น มายด์, ต้น, ฟ้า" maxlength="30" minlength="1" required autocomplete="nickname"></div>
+      <label class="b" style="font-size:14px">เลือกอวาตาร์</label>
+      <div class="avatar-pick" data-avatar-pick></div>
+      <button class="btn btn-primary btn-block" type="submit">สร้างและเข้าใช้งาน</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== Modal: เพิ่ม/แก้ไขงาน ========== -->
+<div class="modal" id="taskModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3 id="taskModalTitle">เพิ่มงานใหม่</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <form id="taskForm">
+      <input type="hidden" id="taskId">
+      <input type="hidden" id="fPrio" value="medium">
+      <div class="field"><label>ชื่องาน *</label><input id="fTitle" placeholder="เช่น แบบฝึกหัดบทที่ 2 ข้อ 1-10" maxlength="100"></div>
+      <div class="two-col">
+        <div class="field"><label>วิชา *</label><input id="fSubject" list="subjectList" placeholder="เลือก/พิมพ์วิชา" maxlength="40"><datalist id="subjectList"></datalist></div>
+        <div class="field"><label>วันส่ง</label><input type="date" id="fDue"></div>
+      </div>
+      <div class="chips" style="margin:-6px 0 12px"><button type="button" class="chip" data-action="due-quick" data-d="0">วันนี้</button><button type="button" class="chip" data-action="due-quick" data-d="1">พรุ่งนี้</button><button type="button" class="chip" data-action="due-quick" data-d="3">อีก 3 วัน</button><button type="button" class="chip" data-action="due-quick" data-d="7">สัปดาห์หน้า</button></div>
+      <div class="field">
+        <label>ระดับความสำคัญ</label>
+        <div class="prio-pick">
+          <button type="button" data-action="pick-prio" data-p="high">🔴 ด่วน</button>
+          <button type="button" data-action="pick-prio" data-p="medium">🟡 กลาง</button>
+          <button type="button" data-action="pick-prio" data-p="low">🟢 ต่ำ</button>
+        </div>
+      </div>
+      <div class="field"><label>ลิงก์ประกอบงาน (ถ้ามี)</label><input type="url" id="fLink" placeholder="https://docs.google.com/..."></div>
+      <div class="field"><label>หมายเหตุ</label><textarea id="fNote" placeholder="รายละเอียดเพิ่มเติม เช่น ส่งในกูเกิลคลาสรูม, ทำเป็นกลุ่ม 4 คน" maxlength="500"></textarea></div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-ghost" data-action="close-modal">ยกเลิก</button>
+        <button type="submit" class="btn btn-primary">💾 บันทึก</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========== Modal: Login แอดมิน ========== -->
+<div class="modal" id="loginModal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-head"><h3>🔐 เข้าสู่ระบบแอดมิน</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <form id="loginForm">
+      <div class="field"><input type="password" id="adminPassInput" placeholder="กรอกรหัสผ่าน" autocomplete="off"></div>
+      <p class="muted" style="font-size:13px;margin-bottom:12px" id="defaultPassHint">รหัสผ่านเริ่มต้น: 1234 (แนะนำให้เปลี่ยนในเมนูตั้งค่า)</p>
+      <button type="submit" class="btn btn-primary btn-block">เข้าสู่ระบบ</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== Modal: แชร์ LINE ========== -->
+<div class="modal" id="shareModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>💬 แชร์สรุปงานไป LINE</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <textarea id="shareText" style="min-height:220px;font-size:14px"></textarea>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn btn-ghost" data-action="copy-share">📋 คัดลอก</button>
+      <button class="btn btn-line" data-action="line-share">ส่งใน LINE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Modal: ยืนยัน ========== -->
+<div class="modal" id="confirmModal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-head"><h3>⚠️ ยืนยันการทำรายการ</h3></div>
+    <p id="confirmText" style="margin-bottom:16px;white-space:pre-wrap;word-break:break-word"></p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" data-action="confirm-no">ยกเลิก</button>
+      <button type="button" class="btn btn-danger" data-action="confirm-yes">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== Modal: เมนู (มือถือ) ========== -->
+<div class="modal" id="menuModal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-head"><h3>☰ เมนู</h3><button class="mini" data-action="close-modal">✖</button></div>
+    <button class="menu-item" data-action="open-sync"><span class="icon">☁️</span>รหัสห้อง 5/4</button>
+    <button class="menu-item" data-action="share"><span class="icon">💬</span>แชร์สรุปงานไป LINE</button>
+    <button class="menu-item" data-action="theme"><span class="icon" id="menuThemeIcon">🌙</span>สลับโหมดมืด / สว่าง</button>
+    <button class="menu-item" data-action="export-file"><span class="icon">⬇️</span>ดาวน์โหลดไฟล์สำรองข้อมูล</button>
+    <button class="menu-item hidden" id="menuInstall" data-action="install"><span class="icon">📲</span>ติดตั้งแอปลงหน้าจอ</button>
+    <button class="menu-item" data-action="logout"><span class="icon">🔄</span>เปลี่ยนโปรไฟล์</button>
+  </div>
+</div>
+
+<input type="file" id="avatarFile" accept="image/*" class="hidden">
+
+<div class="toast-box" id="toastBox"></div>
+
+<script>
+// ================== CONFIG ==================
+const STORAGE_KEY = 'pkstudent_data_v2_4_54';
+const AVATARS = ['🐱','🐶','🐼','🦊','🐰','🐻','🐨','🐯','🦁','🐸','🐵','🦄','🐧','🐹','🐙','🦖'];
+const DEFAULT_SUBJECTS = ['คณิตศาสตร์','วิทยาศาสตร์','ภาษาไทย','ภาษาอังกฤษ','สังคมศึกษา','ประวัติศาสตร์','ฟิสิกส์','เคมี','ชีววิทยา','คอมพิวเตอร์','ศิลปะ','สุขศึกษา/พละ','การงานอาชีพ'];
+const PRIORITY = {
+  high:{label:'ด่วน',icon:'🔴',rank:0},
+  medium:{label:'กลาง',icon:'🟡',rank:1},
+  low:{label:'ต่ำ',icon:'🟢',rank:2}
+};
+const QUOTES = [
+  'ความสำเร็จไม่ได้มาจากโชค แต่มาจากการลงมือทำทุกวัน',
+  'งานที่ยากที่สุด คือการเริ่มต้น — เริ่มเลยตอนนี้!',
+  'ทีละนิด ทีละหน่อย สุดท้ายก็ทำเสร็จได้',
+  'เหนื่อยก็พัก แต่อย่าเลิก 💪',
+  'อนาคตของเรา ถูกสร้างจากสิ่งที่เราทำวันนี้',
+  'ไม่ต้องสมบูรณ์แบบ แค่ทำให้ดีกว่าเมื่อวาน',
+  'การบ้านวันนี้ คือคะแนนสอบวันหน้า',
+  'อย่ารอให้มีแรงบันดาลใจ ลงมือทำแล้วแรงบันดาลใจจะตามมา',
+  'Done is better than perfect — ทำให้เสร็จดีกว่าทำให้เพอร์เฟกต์',
+  'เพื่อนที่ดี คือเพื่อนที่ชวนกันทำการบ้าน 😆',
+  'ความพยายามไม่เคยทรยศใคร',
+  'ทุกงานที่ติ๊กเสร็จ คือก้าวเล็ก ๆ สู่เป้าหมายใหญ่'
+];
+
+// ================== REWARD SHOP ITEMS (NEW v2.3) ==================
+const REWARDS = [
+  { id: 'rov_35', name: 'คูปอง ROV (35 คูปอง)', cost: 150, icon: '⚔️', codePrefix: 'ROV35-' },
+  { id: 'rov_110', name: 'คูปอง ROV (110 คูปอง)', cost: 400, icon: '👑', codePrefix: 'ROV110-' },
+  { id: 'game_card', name: 'โค้ดเติมเกม 50 บาท', cost: 300, icon: '🎮', codePrefix: 'GAME50-' },
+  { id: 'no_homework', name: 'สิทธิ์ยกเว้นการบ้าน 1 ครั้ง', cost: 500, icon: '📜', codePrefix: 'SKIP-HW-' },
+  { id: 'free_snack', name: 'สิทธิ์ขอเพื่อนเลี้ยงขนม', cost: 200, icon: '🧋', codePrefix: 'SNACK-' }
+];
+
+// ================== ACHIEVEMENTS / BADGES DEFINITION (NEW v2.3) ==================
+const BADGES = [
+  { id: 'first_task', name: 'ก้าวแรกสำคัญเสมอ', icon: '🌱', desc: 'ทำการบ้านเสร็จ 1 งาน' },
+  { id: 'pomo_starter', name: 'เริ่มต้นโฟกัส', icon: '🍅', desc: 'ใช้ Pomodoro จับเวลาอ่านหนังสือครบ 1 รอบ' },
+  { id: 'task_5', name: 'นักเคลียร์งาน', icon: '⭐', desc: 'ทำการบ้านเสร็จสะสม 5 งาน' },
+  { id: 'streak_3', name: 'สายสเตรคไฟลุก', icon: '🔥', desc: 'ทำการบ้านต่อเนื่อง 3 วัน' },
+  { id: 'pomo_master', name: 'เจ้าแห่งสมาธิ', icon: '🧠', desc: 'ใช้ Pomodoro ครบ 5 รอบ' },
+  { id: 'all_cleared', name: 'เคลียร์กระดาน', icon: '👑', desc: 'ไม่มีงานค้างเลย (เสร็จ 100%)' }
+];
+
+// ================== SAFE STORAGE ==================
+const store = (() => {
+  const mem = {};
+  try {
+    const k = '__pkstudent_test__';
+    localStorage.setItem(k, '1'); localStorage.removeItem(k);
+    return { ok:true, get:key => localStorage.getItem(key), set:(key,val) => localStorage.setItem(key,val) };
+  } catch(e) {
+    return { ok:false, get:key => (key in mem ? mem[key] : null), set:(key,val) => { mem[key] = val; } };
+  }
+})();
+
+// ================== STATE ==================
+function defaultState(){ const date=(n)=>{const d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}; return { profiles:[{id:'demo1',name:'มีนา',avatar:'🦊',badges:[],pomoCount:1,points:40,coupons:[]},{id:'demo2',name:'ต้นกล้า',avatar:'🐻',badges:[],pomoCount:0,points:25,coupons:[]},{id:'demo3',name:'ฟ้าใส',avatar:'🐰',badges:[],pomoCount:2,points:60,coupons:[]},{id:'demo4',name:'ปุณณ์',avatar:'🐼',badges:[],pomoCount:0,points:10,coupons:[]}], tasks:[{id:'demo-task-1',title:'แบบฝึกหัดสมการเชิงเส้น หน้า 42–43',subject:'คณิตศาสตร์',due:date(0),priority:'high',owner:'all',doneBy:['demo1'],doneAt:{demo1:Date.now()},note:'ทำข้อ 1–10 ลงสมุด ส่งต้นคาบ',link:'',createdAt:Date.now()},{id:'demo-task-2',title:'สรุปการทดลองเรื่องแรงและการเคลื่อนที่',subject:'วิทยาศาสตร์',due:date(1),priority:'medium',owner:'all',doneBy:[],doneAt:{},note:'เขียนสรุปผลพร้อมวาดกราฟ',link:'',createdAt:Date.now()},{id:'demo-task-3',title:'อ่านบทที่ 4 และตอบคำถามท้ายบท',subject:'ภาษาอังกฤษ',due:date(3),priority:'low',owner:'all',doneBy:['demo2'],doneAt:{demo2:Date.now()},note:'ข้อ 1–5 ใน workbook',link:'',createdAt:Date.now()}], announcements:[{id:'demo-news-1',text:'พรุ่งนี้มีสอบย่อยคณิตศาสตร์ บทสมการ อย่าลืมทบทวนกันนะ',date:Date.now()-3600000},{id:'demo-news-2',text:'ส่งใบอนุญาตทัศนศึกษาให้ครูประจำชั้นภายในวันศุกร์',date:Date.now()-86400000}], adminPass:'1234', theme:'light', lastUser:null, roomCode:'PK-54' }; }
+function loadState(){
+  try { return normalizeState(JSON.parse(store.get(STORAGE_KEY))); } catch(e) { return defaultState(); }
+}
+function normalizeState(d){
+  try {
+    if(!d || typeof d !== 'object') return defaultState();
+    const s = { ...defaultState(), ...d };
+    s.profiles = Array.isArray(s.profiles) ? s.profiles : [];
+    s.profiles = s.profiles.map(p => ({
+      ...p,
+      badges: Array.isArray(p.badges) ? p.badges : [],
+      pomoCount: p.pomoCount || 0,
+      points: p.points || 0,
+      coupons: Array.isArray(p.coupons) ? p.coupons : []
+    }));
+    s.tasks = (Array.isArray(s.tasks) ? s.tasks : []).map(t => ({
+      ...t, doneBy: Array.isArray(t.doneBy) ? t.doneBy : [], doneAt: (t.doneAt && typeof t.doneAt === 'object') ? t.doneAt : {}, priority: PRIORITY[t.priority] ? t.priority : 'medium'
+    }));
+    s.announcements = Array.isArray(s.announcements) ? s.announcements : [];
+    return s;
+  } catch(e) { return defaultState(); }
+}
+let state = loadState();
+let currentUser = null;
+let filter = { search:'', subject:'all', status:'all' };
+let editingOwner = null;
+let selectedAvatar = AVATARS[0];
+let confirmResolve = null;
+let calDate = new Date();
+let selectedCalDateStr = null;
+
+function save(){
+  const snapshot = JSON.stringify(state);
+  try { store.set(STORAGE_KEY, snapshot); }
+  catch(e) { console.warn('localStorage backup unavailable', e); }
+  if(DB.db){ clearTimeout(DB.t); DB.t = setTimeout(() => DB.flush(), 120); }
+  else if(!store.ok) toast('เบราว์เซอร์ไม่อนุญาตให้บันทึกถาวร ข้อมูลอาจหายเมื่อปิดหน้า','error');
+  
+  if(SYNC.enabled && state.roomCode) {
+    SYNC.pushCloudState();
+  }
+}
+
+// ================== CLOUD SYNC & REST MOCKUP (NEW v2.3) ==================
+const SYNC = {
+  enabled: false,
+  pushCloudState: async () => {
+    // Mockup Cloud Push functionality
+    const statusEl = $('#cloudSyncStatus');
+    if(statusEl) statusEl.textContent = `⚡ สถานะข้อมูลในเครื่อง: บันทึกล่าสุด ${new Date().toLocaleTimeString('th-TH')}`;
+  }
+};
+
+function connectCloudRoom(){
+  const code = $('#roomCodeInput').value.trim().toUpperCase();
+  if(!code) {
+    toast('กรุณากรอกรหัสห้องเรียนก่อน','error');
+    return;
+  }
+  state.roomCode = code;
+  SYNC.enabled = false;
+  save();
+  $('#cloudSyncStatus').textContent = `🟡 บันทึกรหัสห้อง [${code}] ในอุปกรณ์นี้แล้ว — ยังไม่เชื่อมต่อ Cloud`;
+  toast(`บันทึกรหัสห้อง ${code} ในอุปกรณ์นี้แล้ว`);
+  closeModal('syncModal');
+}
+
+function generateNewRoomCode(){
+  const code = 'PK-' + Math.floor(1000 + Math.random() * 9000);
+  $('#roomCodeInput').value = code;
+}
+
+// ================== DATABASE (IndexedDB) ==================
+const DB = {
+  db:null, snap:new Map(), t:null, dead:false,
+  open(){ return new Promise((res, rej) => {
+    if(!window.indexedDB) return rej(new Error('no indexedDB'));
+    const r = indexedDB.open('pkstudent_db_v24_54', 1);
+    r.onupgradeneeded = () => { const d = r.result;
+      d.createObjectStore('profiles', {keyPath:'id'});
+      const t = d.createObjectStore('tasks', {keyPath:'id'}); t.createIndex('owner','owner'); t.createIndex('due','due');
+      const c = d.createObjectStore('completions', {keyPath:'key'}); c.createIndex('profileId','profileId'); c.createIndex('taskId','taskId');
+      d.createObjectStore('announcements', {keyPath:'id'});
+      d.createObjectStore('meta', {keyPath:'key'});
+      d.createObjectStore('outbox', {keyPath:'seq', autoIncrement:true});
+    };
+    r.onsuccess = () => { if(this.dead){ r.result.close(); return; } this.db = r.result; res(); };
+    r.onblocked = () => rej(new Error('blocked'));
+    r.onerror = () => rej(r.error);
+  }); },
+  all(n){ return new Promise((res, rej) => { const q = this.db.transaction(n).objectStore(n).getAll(); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); },
+  flatten(s){
+    const R = { profiles:[], tasks:[], completions:[], announcements:[], meta:[{key:'settings', value:{theme:s.theme, adminPass:s.adminPass, lastUser:s.lastUser, roomCode:s.roomCode}}] };
+    s.profiles.forEach(p => R.profiles.push({id:p.id, name:p.name, avatar:p.avatar, badges:p.badges, pomoCount:p.pomoCount, points:p.points, coupons:p.coupons}));
+    s.announcements.forEach(a => R.announcements.push({id:a.id, text:a.text, date:a.date}));
+    s.tasks.forEach(t => {
+      const {doneBy, doneAt, ...row} = t; R.tasks.push(row);
+      doneBy.forEach(pid => R.completions.push({key:t.id+'|'+pid, taskId:t.id, profileId:pid, at:(doneAt && doneAt[pid]) || 0}));
+    });
+    return R;
+  },
+  async load(){
+    const [p,t,c,a,m] = await Promise.all(['profiles','tasks','completions','announcements','meta'].map(n => this.all(n)));
+    if(!p.length && !t.length && !a.length && !m.length) return false;
+    const st = defaultState(); Object.assign(st, (m.find(x => x.key === 'settings') || {}).value || {});
+    st.profiles = p; st.announcements = a; st.tasks = t.map(x => ({...x, doneBy:[], doneAt:{}}));
+    const by = new Map(st.tasks.map(x => [x.id, x]));
+    c.forEach(x => { const k = by.get(x.taskId); if(k){ k.doneBy.push(x.profileId); k.doneAt[x.profileId] = x.at; } });
+    state = normalizeState(st); this.snap.clear();
+    for(const [n, list] of Object.entries(this.flatten(state))) list.forEach(r => this.snap.set(n+':'+r[this.db.transaction(n).objectStore(n).keyPath], JSON.stringify(r)));
+    return true;
+  },
+  flush(){
+    if(!this.db) return;
+    try {
+      const rows = this.flatten(state), tx = this.db.transaction(['profiles','tasks','completions','announcements','meta','outbox'], 'readwrite');
+      const out = tx.objectStore('outbox'), now = Date.now(), seen = new Set(), log = (store, op, id) => { if(SYNC.enabled) out.add({store, op, id, ts:now}); };
+      for(const [n, list] of Object.entries(rows)){
+        const os = tx.objectStore(n), kp = os.keyPath;
+        for(const r of list){
+          const k = n+':'+r[kp], js = JSON.stringify(r); seen.add(k);
+          if(this.snap.get(k) !== js){ this.snap.set(k, js); if(n === 'tasks' || n === 'profiles') r.updatedAt = now; os.put(r); if(n !== 'meta') log(n, 'put', r[kp]); }
+        }
+      }
+      for(const k of [...this.snap.keys()]) if(!seen.has(k)){
+        const i = k.indexOf(':'), n = k.slice(0, i), id = k.slice(i+1);
+        tx.objectStore(n).delete(id); this.snap.delete(k); log(n, 'del', id);
+      }
+    } catch(e){ console.error('DB flush', e); }
+  }
+};
+async function bootDB(){
+  try {
+    await Promise.race([DB.open(), new Promise((_, rej) => setTimeout(() => { DB.dead = true; rej(new Error('db timeout')); }, 2500))]);
+    const had = await DB.load();
+    if(!had) DB.flush();
+    if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
+  } catch(e){ DB.db = null; }
+}
+window.addEventListener('pagehide', () => { clearTimeout(DB.t); DB.flush(); });
+document.addEventListener('visibilitychange', () => { if(document.hidden){ clearTimeout(DB.t); DB.flush(); } });
+
+// ================== HELPERS ==================
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const avatarHtml = a => { 
+  const v = String(a || ''); 
+  const safeImage = /^data:image\/(?:jpeg|png|webp|gif);base64,/.test(v); 
+  return safeImage ? `<img src="${v}" alt="" loading="lazy">` : esc(v.startsWith('data:') ? '📷' : v); 
+};
+const safeHttpUrl = value => { try { const u = new URL(String(value || '')); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch { return ''; } };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const normPass = s => String(s || '').replace(/[๐-๙]/g, c => '๐๑๒๓๔๕๖๗๘๙'.indexOf(c)).trim();
+function todayStr(){ const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
+function daysUntil(due){
+  if(!due) return null;
+  return Math.round((new Date(due+'T00:00:00') - new Date(todayStr()+'T00:00:00')) / 86400000);
+}
+const fmtDate = due => new Date(due+'T00:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'});
+function dueLabel(t, done){
+  if(!t.due) return '';
+  const n = daysUntil(t.due); let cls = '', txt;
+  if(done) txt = '📅 ' + fmtDate(t.due);
+  else if(n < 0){ cls='overdue'; txt=`⚠️ เลยกำหนด ${-n} วัน (${fmtDate(t.due)})`; }
+  else if(n === 0){ cls='today'; txt='⏰ ส่งวันนี้!'; }
+  else if(n === 1){ cls='soon'; txt='⏰ ส่งพรุ่งนี้'; }
+  else { txt=`📅 ${fmtDate(t.due)} (อีก ${n} วัน)`; if(n <= 3) cls='soon'; }
+  return `<span class="due ${cls}">${txt}</span>`;
+}
+const userTasks = id => state.tasks.filter(t => t.owner === id || t.owner === 'all');
+const isDone = (t, id) => t.doneBy.includes(id);
+const isOverdue = (t, id) => !isDone(t,id) && t.due && daysUntil(t.due) < 0;
+function userStats(id){
+  const ts = userTasks(id);
+  const done = ts.filter(t => isDone(t,id)).length;
+  return {
+    total: ts.length, done, pending: ts.length - done,
+    overdue: ts.filter(t => isOverdue(t,id)).length,
+    urgent: ts.filter(t => !isDone(t,id) && t.priority === 'high').length,
+    pct: ts.length ? Math.round(done / ts.length * 100) : 0
+  };
+}
+
+// ================== AUDIO SYNTHESIZER FOR TIMER (NEW v2.3) ==================
+function playBeepSound(){
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 note
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.8);
+  } catch(e) {}
+}
+
+// ================== POMODORO TIMER LOGIC (NEW v2.3) ==================
+let pomoInterval = null;
+let pomoSeconds = 25 * 60;
+let pomoIsRunning = false;
+let pomoMode = 'focus'; // 'focus' | 'break'
+
+function updatePomoDisplay(){
+  const m = Math.floor(pomoSeconds / 60);
+  const s = pomoSeconds % 60;
+  $('#pomoDisplay').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function togglePomodoro(){
+  if(pomoIsRunning){
+    clearInterval(pomoInterval);
+    pomoIsRunning = false;
+    $('#pomoStartBtn').textContent = '▶️ เริ่มจับเวลาต่อ';
+  } else {
+    pomoIsRunning = true;
+    $('#pomoStartBtn').textContent = '⏸️ พักจับเวลา';
+    pomoInterval = setInterval(() => {
+      if(pomoSeconds > 0){
+        pomoSeconds--;
+        updatePomoDisplay();
+      } else {
+        clearInterval(pomoInterval);
+        pomoIsRunning = false;
+        playBeepSound();
+        if(pomoMode === 'focus'){
+          if(currentUser){
+            currentUser.pomoCount = (currentUser.pomoCount || 0) + 1;
+            save();
+            checkAndAwardBadges(currentUser.id);
+            updatePomoStatsText();
+          }
+          bigCelebrate();
+          toast('🍅 เก่งมาก! ครบช่วงเวลาอ่านหนังสือ 25 นาทีแล้ว ได้เวลาพัก 5 นาที');
+          pomoMode = 'break';
+          pomoSeconds = 5 * 60;
+          $('#pomoModeBadge').textContent = '☕ โหมดพักผ่อนหย่อนใจ (5 นาที)';
+          $('#pomoModeBadge').classList.add('break');
+          $('#pomoSub').textContent = 'ยืดสายตา ดื่มน้ำ แล้วเตรียมพร้อมสำหรับรอบถัดไป!';
+        } else {
+          toast('🔔 หมดเวลาพักแล้ว! พร้อมลุยรอบถัดไปหรือยัง?');
+          pomoMode = 'focus';
+          pomoSeconds = 25 * 60;
+          $('#pomoModeBadge').textContent = '🎯 โหมดโฟกัสอ่านหนังสือ (25 นาที)';
+          $('#pomoModeBadge').classList.remove('break');
+          $('#pomoSub').textContent = 'อ่านหนังสือแบบต่อเนื่องโดยไม่วอกแวกสะสมสมาธิกัน!';
+        }
+        updatePomoDisplay();
+        $('#pomoStartBtn').textContent = '▶️ เริ่มจับเวลา';
+      }
+    }, 1000);
+  }
+}
+
+function resetPomodoro(){
+  clearInterval(pomoInterval);
+  pomoIsRunning = false;
+  pomoMode = 'focus';
+  pomoSeconds = 25 * 60;
+  $('#pomoModeBadge').textContent = '🎯 โหมดโฟกัสอ่านหนังสือ (25 นาที)';
+  $('#pomoModeBadge').classList.remove('break');
+  $('#pomoSub').textContent = 'อ่านหนังสือแบบต่อเนื่องโดยไม่วอกแวกสะสมสมาธิกัน!';
+  $('#pomoStartBtn').textContent = '▶️ เริ่มจับเวลา';
+  updatePomoDisplay();
+}
+
+function updatePomoStatsText(){
+  if(!currentUser) return;
+  const count = currentUser.pomoCount || 0;
+  $('#pomoStatsText').textContent = `🍅 สะสมสมาธิแล้ว ${count} รอบ (${count * 25} นาที)`;
+}
+
+// ================== BADGES & ACHIEVEMENTS LOGIC (NEW v2.3) ==================
+function checkAndAwardBadges(userId){
+  const user = state.profiles.find(p => p.id === userId);
+  if(!user) return;
+  user.badges = user.badges || [];
+  const s = userStats(userId);
+  const newUnlocked = [];
+
+  const check = (badgeId, condition) => {
+    if(condition && !user.badges.includes(badgeId)){
+      user.badges.push(badgeId);
+      newUnlocked.push(badgeId);
+    }
+  };
+
+  check('first_task', s.done >= 1);
+  check('task_5', s.done >= 5);
+  check('pomo_starter', (user.pomoCount || 0) >= 1);
+  check('pomo_master', (user.pomoCount || 0) >= 5);
+  check('all_cleared', s.total > 0 && s.pending === 0);
+
+  // Check streak 3 days
+  const dkey = ts => { const d = new Date(ts); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  const times = state.tasks.map(t => isDone(t,userId) && t.doneAt && t.doneAt[userId]).filter(Boolean);
+  const days = new Set(times.map(dkey));
+  let streak = 0; const d = new Date(); if(!days.has(dkey(d))) d.setDate(d.getDate() - 1);
+  while(days.has(dkey(d))){ streak++; d.setDate(d.getDate() - 1); }
+  check('streak_3', streak >= 3);
+
+  if(newUnlocked.length > 0){
+    save();
+    newUnlocked.forEach(bId => {
+      const bObj = BADGES.find(x => x.id === bId);
+      if(bObj){
+        toast(`🏆 คุณได้รับเหรียญรางวัลใหม่: [${bObj.name}] ${bObj.icon}`, 'info');
+      }
+    });
+    bigCelebrate();
+  }
+}
+
+// ================== UI CORE ==================
+function toast(msg, type='success', act){
+  const box = $('#toastBox'); if(!box) return;
+  const el = document.createElement('div');
+  el.className = 'toast ' + type; el.textContent = msg;
+  if(act){
+    const b = document.createElement('button'); b.textContent = act.label;
+    b.style.cssText = 'margin-left:14px;background:none;color:#fde047;font-weight:700;font-size:14px;padding:6px 4px;min-height:36px';
+    b.onclick = () => { act.fn(); el.remove(); };
+    el.appendChild(b); el.style.pointerEvents = 'auto';
+  }
+  box.appendChild(el);
+  setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 300); }, act ? 5500 : type === 'error' ? 4500 : 2600);
+}
+function applyTheme(){
+  document.documentElement.dataset.theme = state.theme;
+  const mi = $('#menuThemeIcon'); if(mi) mi.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+  const tc = document.querySelector('meta[name=theme-color]'); if(tc) tc.content = state.theme === 'dark' ? '#0f172a' : '#6366f1';
+  $$('.theme-toggle').forEach(b => {
+    if(b.querySelector('.icon')) b.querySelector('.icon').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    else b.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+  });
+}
+function toggleTheme(){ state.theme = state.theme === 'dark' ? 'light' : 'dark'; save(); applyTheme(); }
+function show(id){ ['profileScreen','appScreen','adminScreen'].forEach(s => $('#'+s).classList.toggle('hidden', s !== id)); window.scrollTo(0,0); }
+function openModal(id){ $('#'+id).classList.add('open'); document.body.classList.add('lock'); }
+function closeModal(id){
+  $('#'+id).classList.remove('open');
+  if(!$('.modal.open')) document.body.classList.remove('lock');
+  if(id === 'confirmModal' && confirmResolve){ const r = confirmResolve; confirmResolve = null; r(false); }
+}
+function askConfirm(msg){
+  if(confirmResolve){ const r = confirmResolve; confirmResolve = null; r(false); }
+  $('#confirmText').textContent = msg;
+  openModal('confirmModal');
+  return new Promise(res => { confirmResolve = res; });
+}
+function answerConfirm(v){
+  const r = confirmResolve; confirmResolve = null;
+  $('#confirmModal').classList.remove('open');
+  if(!$('.modal.open')) document.body.classList.remove('lock');
+  if(r) r(v);
+}
+function refresh(){
+  if(!$('#adminScreen').classList.contains('hidden')) renderAdmin();
+  else if(currentUser) renderApp();
+  else renderProfiles();
+}
+function celebrate(el){
+  if(typeof confetti !== 'function') return;
+  const r = el.getBoundingClientRect();
+  confetti({ particleCount:70, spread:75, startVelocity:30,
+    origin:{ x:(r.left+r.width/2)/innerWidth, y:(r.top+r.height/2)/innerHeight },
+    colors:['#6366f1','#ec4899','#10b981','#f59e0b'] });
+}
+function bigCelebrate(){
+  if(typeof confetti !== 'function') return;
+  const end = Date.now() + 1200;
+  (function frame(){
+    confetti({ particleCount:5, angle:60, spread:60, origin:{x:0} });
+    confetti({ particleCount:5, angle:120, spread:60, origin:{x:1} });
+    if(Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+// ================== PROFILES ==================
+function renderAvatarPick(){
+  const isImg = String(selectedAvatar).startsWith('data:image');
+  const up = `<button type="button" class="upload ${isImg ? 'sel' : ''}" data-action="pick-photo" data-target="new" title="อัปโหลดรูปของคุณ">${isImg ? avatarHtml(selectedAvatar) : '📷'}</button>`;
+  const html = up + AVATARS.map(a =>
+    `<button type="button" class="${a === selectedAvatar ? 'sel' : ''}" data-action="pick-avatar" data-avatar="${a}">${a}</button>`).join('');
+  $$('[data-avatar-pick]').forEach(el => el.innerHTML = html);
+}
+function addProfile(name){
+  name = String(name || '').trim().replace(/\s+/g, ' ');
+  if(!name){ toast('กรุณากรอกชื่อก่อนสร้างโปรไฟล์','error'); $('#quickProfileName')?.focus(); return null; }
+  if(name.length > 30){ toast('ชื่อต้องไม่เกิน 30 ตัวอักษร','error'); return null; }
+  if(state.profiles.some(p => String(p.name || '').trim().toLocaleLowerCase() === name.toLocaleLowerCase())){
+    toast('มีชื่อนี้อยู่แล้ว ลองใช้ชื่ออื่น','error'); return null;
+  }
+  const p = { id: uid(), name, avatar: selectedAvatar, badges:[], pomoCount:0, points:0, coupons:[] };
+  state.profiles.push(p);
+  save();
+  selectedAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+  return p;
+}
+function renderProfiles(){
+  const addCard = `<button class="profile-card add" data-action="open-new-profile">
+      <div class="avatar">➕</div><div class="pname">เพิ่มโปรไฟล์</div><div class="psub">สร้างโปรไฟล์ใหม่</div>
+    </button>`;
+  const cards = state.profiles.map(p => {
+    const s = userStats(p.id);
+    return `<button class="profile-card" data-action="pick-profile" data-id="${p.id}">
+      <div class="avatar">${avatarHtml(p.avatar)}</div>
+      <div class="pname">${esc(p.name)}</div>
+      <div class="psub">${s.pending ? `ค้าง ${s.pending} งาน` : 'ไม่มีงานค้าง ✨'}</div>
+    </button>`;
+  }).join('');
+  $('#profileGrid').innerHTML = cards + addCard;
+}
+function openNewProfile(){
+  $('#quickProfileName').value = '';
+  renderAvatarPick();
+  openModal('profileModal');
+  setTimeout(() => $('#quickProfileName').focus(), 250);
+}
+$('#quickProfileForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = $('#quickProfileName');
+  const submit = e.currentTarget.querySelector('button[type="submit"]');
+  if(!input.value.trim()) { toast('กรุณากรอกชื่อเล่นก่อน','error'); input.focus(); return; }
+  if(submit) submit.disabled = true;
+  try {
+    const p = addProfile(input.value);
+    if(!p) return;
+    input.value = '';
+    closeModal('profileModal');
+    renderProfiles();
+    loginAs(p.id);
+  } catch(err) {
+    console.error('create profile failed', err);
+    toast('สร้างโปรไฟล์ไม่สำเร็จ: ' + (err.message || 'กรุณาลองใหม่'),'error');
+  } finally {
+    if(submit) submit.disabled = false;
+  }
+});
+function loginAs(id){
+  currentUser = state.profiles.find(p => p.id === id);
+  if(!currentUser){ toast('ไม่พบโปรไฟล์นี้','error'); renderProfiles(); return; }
+  filter = { search:'', subject:'all', status:'all' };
+  $('#searchInput').value = ''; $('#sortSelect').value = 'smart';
+  state.lastUser = id; save();
+  show('appScreen'); switchMainView('tasks'); renderApp(); showQuote();
+  checkAndAwardBadges(currentUser.id);
+  toast(`ยินดีต้อนรับ ${currentUser.name} 👋`, 'info');
+}
+function logout(){ currentUser = null; state.lastUser = null; save(); renderProfiles(); show('profileScreen'); }
+
+// ================== CALENDAR VIEW ==================
+function switchMainView(view){
+  $('#tasksSection').classList.toggle('hidden', view !== 'tasks');
+  $('#calendarSection').classList.toggle('hidden', view !== 'calendar');
+  $('#pomoSection').classList.toggle('hidden', view !== 'pomo');
+  $('#statsSection').classList.toggle('hidden', view !== 'stats');
+  
+  [['tasks','viewTasksBtn','navTasks'],['calendar','viewCalBtn','navCal'],['pomo','viewPomoBtn','navPomo'],['stats','viewStatsBtn','navStats']].forEach(([v,a,b]) => {
+    [a,b].forEach(x => { const n = $('#'+x); if(n) n.classList.toggle('active', view === v); });
+  });
+  if(view === 'calendar') renderCalendar();
+  if(view === 'pomo') { updatePomoDisplay(); updatePomoStatsText(); }
+  if(view === 'stats') renderInsights();
+  window.scrollTo({top:0});
+}
+
+function changeCalMonth(delta){
+function togglePomodoro(){
+  if(pomoIsRunning){
+    clearInterval(pomoInterval);
+    pomoIsRunning = false;
+    $('#pomoStartBtn').textContent = '▶️ เริ่มจับเวลาต่อ';
+  } else {
+    pomoIsRunning = true;
+    $('#pomoStartBtn').textContent = '⏸️ พักจับเวลา';
+    pomoInterval = setInterval(() => {
+      if(pomoSeconds > 0){
+        pomoSeconds--;
+        updatePomoDisplay();
+      } else {
+        clearInterval(pomoInterval);
+        pomoIsRunning = false;
+        playBeepSound();
+        if(pomoMode === 'focus'){
+          if(currentUser){
+            currentUser.pomoCount = (currentUser.pomoCount || 0) + 1;
+            currentUser.points = (currentUser.points || 0) + 15; // Earn 15 points
+            save();
+            toast('🪙 +15 PK Points จากการอ่านหนังสือ!', 'info');
+            checkAndAwardBadges(currentUser.id);
+            updatePomoStatsText();
+          }
+          bigCelebrate();
+          toast('🍅 เก่งมาก! ครบช่วงเวลาอ่านหนังสือ 25 นาทีแล้ว ได้เวลาพัก 5 นาที');
+          pomoMode = 'break';
+          pomoSeconds = 5 * 60;
+          $('#pomoModeBadge').textContent = '☕ โหมดพักผ่อนหย่อนใจ (5 นาที)';
+          $('#pomoModeBadge').classList.add('break');
+          $('#pomoSub').textContent = 'ยืดสายตา ดื่มน้ำ แล้วเตรียมพร้อมสำหรับรอบถัดไป!';
+        } else {
+          toast('🔔 หมดเวลาพักแล้ว! พร้อมลุยรอบถัดไปหรือยัง?');
+          pomoMode = 'focus';
+          pomoSeconds = 25 * 60;
+          $('#pomoModeBadge').textContent = '🎯 โหมดโฟกัสอ่านหนังสือ (25 นาที)';
+          $('#pomoModeBadge').classList.remove('break');
+          $('#pomoSub').textContent = 'อ่านหนังสือแบบต่อเนื่องโดยไม่วอกแวกสะสมสมาธิกัน!';
+        }
+        updatePomoDisplay();
+        $('#pomoStartBtn').textContent = '▶️ เริ่มจับเวลา';
+      }
+    }, 1000);
+  }
+}
+function checkAndAwardBadges(userId){
+  const user = state.profiles.find(p => p.id === userId);
+  if(!user) return;
+  user.badges = user.badges || [];
+  const s = userStats(userId);
+  const newUnlocked = [];
+
+  const check = (badgeId, condition) => {
+    if(condition && !user.badges.includes(badgeId)){
+      user.badges.push(badgeId);
+      user.points = (user.points || 0) + 50; // Earn 50 points per badge
+      newUnlocked.push(badgeId);
+    }
+  };
+
+  check('first_task', s.done >= 1);
+  check('task_5', s.done >= 5);
+  check('pomo_starter', (user.pomoCount || 0) >= 1);
+  check('pomo_master', (user.pomoCount || 0) >= 5);
+  check('all_cleared', s.total > 0 && s.pending === 0);
+
+  // Check streak 3 days
+  const dkey = ts => { const d = new Date(ts); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  const times = state.tasks.map(t => isDone(t,userId) && t.doneAt && t.doneAt[userId]).filter(Boolean);
+  const days = new Set(times.map(dkey));
+  let streak = 0; const d = new Date(); if(!days.has(dkey(d))) d.setDate(d.getDate() - 1);
+  while(days.has(dkey(d))){ streak++; d.setDate(d.getDate() - 1); }
+  check('streak_3', streak >= 3);
+
+  if(newUnlocked.length > 0){
+    save();
+    newUnlocked.forEach(bId => {
+      const bObj = BADGES.find(x => x.id === bId);
+      if(bObj){
+        toast(`🏆 เหรียญใหม่: [${bObj.name}] ${bObj.icon} (+50 แต้ม!)`, 'info');
+      }
+    });
+    bigCelebrate();
+  }
+}
+
+// ================== REWARD SHOP LOGIC (NEW v2.3) ==================
+function renderShop(){
+  if(!currentUser) return;
+  $('#userPointsDisplay').textContent = `🪙 ${currentUser.points || 0}`;
+
+  // Render items grid
+  $('#rewardsGrid').innerHTML = REWARDS.map(r => {
+    const canAfford = (currentUser.points || 0) >= r.cost;
+    return `<div class="card" style="text-align:center; padding:14px 10px; margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div style="font-size:36px; margin-bottom:4px;">${r.icon}</div>
+        <div style="font-weight:700; font-size:13.5px; line-height:1.3;">${r.name}</div>
+        <div style="color:var(--accent); font-weight:800; font-size:14px; margin:6px 0;">🪙 ${r.cost} แต้ม</div>
+      </div>
+      <button class="btn btn-primary btn-block" style="padding:8px; min-height:38px; font-size:13px;" ${canAfford ? '' : 'disabled style="opacity:0.5; cursor:not-allowed;"'} onclick="redeemReward('${r.id}')">
+        ${canAfford ? '🎁 แลกรางวัล' : 'แต้มไม่พอ'}
+      </button>
+    </div>`;
+  }).join('');
+
+  // Render my coupons
+  const coupons = currentUser.coupons || [];
+  if(!coupons.length){
+    $('#myCouponsList').innerHTML = `<div class="empty">ยังไม่มีคูปองที่แลกไว้</div>`;
+  } else {
+    $('#myCouponsList').innerHTML = coupons.map(c => `
+      <div class="list-row">
+        <div class="grow">
+          <div class="b">${esc(c.name)}</div>
+          <div style="font-family:monospace; font-weight:700; color:var(--primary); font-size:14px; margin-top:2px;">
+            🔑 ${esc(c.code)}
+          </div>
+          <small class="muted">แลกเมื่อ ${new Date(c.date).toLocaleDateString('th-TH')}</small>
+        </div>
+        <button class="btn btn-ghost" style="padding:6px 12px; min-height:36px; font-size:12.5px;" onclick="copyCouponCode('${esc(c.code)}')">📋 คัดลอก</button>
+      </div>
+    `).join('');
+  }
+}
+
+async function redeemReward(rewardId){
+  if(!currentUser) return;
+  const r = REWARDS.find(x => x.id === rewardId);
+  if(!r) return;
+  if((currentUser.points || 0) < r.cost){
+    toast('แต้มสะสมไม่เพียงพอ', 'error');
+    return;
+  }
+
+  if(!(await askConfirm(`ยืนยันการแลก "${r.name}" โดยใช้ ${r.cost} แต้ม?`))) return;
+
+  currentUser.points -= r.cost;
+  const code = r.codePrefix + Math.random().toString(36).substring(2, 8).toUpperCase();
+  currentUser.coupons = currentUser.coupons || [];
+  currentUser.coupons.unshift({ id: uid(), name: r.name, code, date: Date.now() });
+
+  save();
+  celebrate(document.body);
+  toast(`🎉 แลก ${r.name} สำเร็จ! รหัสคูปอง: ${code}`);
+  renderShop();
+}
+
+async function copyCouponCode(code){
+  try {
+    await navigator.clipboard.writeText(code);
+  } catch(e) {
+    const input = document.createElement('input');
+    input.value = code; document.body.appendChild(input);
+    input.select(); document.execCommand('copy'); input.remove();
+  }
+  toast(`📋 คัดลอกรหัส [${code}] เรียบร้อย!`);
+}
+
+// ================== CALENDAR VIEW ==================
+function switchMainView(view){
+  $('#tasksSection').classList.toggle('hidden', view !== 'tasks');
+  $('#calendarSection').classList.toggle('hidden', view !== 'calendar');
+  $('#pomoSection').classList.toggle('hidden', view !== 'pomo');
+  $('#shopSection').classList.toggle('hidden', view !== 'shop');
+  $('#statsSection').classList.toggle('hidden', view !== 'stats');
+  
+  [['tasks','viewTasksBtn','navTasks'],['calendar','viewCalBtn','navCal'],['pomo','viewPomoBtn','navPomo'],['shop','viewShopBtn','navShop'],['stats','viewStatsBtn','navStats']].forEach(([v,a,b]) => {
+    [a,b].forEach(x => { const n = $('#'+x); if(n) n.classList.toggle('active', view === v); });
+  });
+  if(view === 'calendar') renderCalendar();
+  if(view === 'pomo') { updatePomoDisplay(); updatePomoStatsText(); }
+  if(view === 'shop') renderShop();
+  if(view === 'stats') renderInsights();
+  window.scrollTo({top:0});
+}
+<!-- ... existing code -->
+function toggleTask(id, btn){
+  const t = state.tasks.find(x => x.id === id);
+  if(!t || !currentUser) return;
+  const u = currentUser.id, i = t.doneBy.indexOf(u);
+  if(i > -1){
+    t.doneBy.splice(i,1); if(t.doneAt) delete t.doneAt[u];
+    currentUser.points = Math.max(0, (currentUser.points || 0) - 10); // Deduct 10 points
+    save(); renderApp(); haptic(10);
+    toast('↩️ ย้ายกลับไปเป็นงานค้างแล้ว (-10 แต้ม)','info'); return;
+  }
+  t.doneBy.push(u); (t.doneAt = t.doneAt || {})[u] = Date.now();
+  currentUser.points = (currentUser.points || 0) + 10; // Earn 10 points
+  save(); haptic(18);
+  btn.classList.add('checked');
+  btn.closest('.task').classList.add('done','pop');
+  celebrate(btn);
+  checkAndAwardBadges(u);
+  const s = userStats(u);
+  if(s.pending === 0){ bigCelebrate(); toast('🎉 เคลียร์งานครบทุกงานแล้ว เก่งมาก! (+10 แต้ม)'); }
+  else toast(`✅ เยี่ยม! เหลืออีก ${s.pending} งาน (+10 แต้ม)`);
+  setTimeout(renderApp, 550);
+}
+
+// ================== TASK MODAL ==================
+function setPrio(p){
+  $('#fPrio').value = p;
+  $$('.prio-pick button').forEach(b => b.classList.toggle('sel', b.dataset.p === p));
+}
+function renderSubjectList(){
+  const all = [...new Set([...DEFAULT_SUBJECTS, ...state.tasks.map(t => t.subject)])];
+  $('#subjectList').innerHTML = all.map(s => `<option value="${esc(s)}">`).join('');
+}
+function openTaskModal(task, owner){
+  if(!task && !owner){ toast('กรุณาเลือกโปรไฟล์ก่อน','error'); return; }
+  $('#taskForm').reset();
+  $('#taskId').value = task ? task.id : '';
+  editingOwner = task ? task.owner : owner;
+  $('#taskModalTitle').textContent = task ? '✏️ แก้ไขงาน' : (editingOwner === 'all' ? '📢 ประกาศงานให้ทุกคน' : '➕ เพิ่มงานใหม่');
+  $('#fTitle').value = task?.title || '';
+  $('#fSubject').value = task?.subject || '';
+  $('#fDue').value = task?.due || '';
+  $('#fLink').value = task?.link || '';
+  $('#fNote').value = task?.note || '';
+  setPrio(task?.priority || 'medium');
+  renderSubjectList();
+  openModal('taskModal');
+  setTimeout(() => $('#fTitle').focus(), 250);
+}
+$('#taskForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const title = $('#fTitle').value.trim(), subject = $('#fSubject').value.trim();
+  if(!title || !subject){ toast('กรุณากรอกชื่องานและวิชา','error'); return; }
+  const data = { title, subject, due: $('#fDue').value, priority: $('#fPrio').value, link: $('#fLink').value.trim(), note: $('#fNote').value.trim() };
+  const id = $('#taskId').value;
+  if(id){
+    const t = state.tasks.find(x => x.id === id);
+    if(t) Object.assign(t, data);
+    toast('💾 บันทึกการแก้ไขแล้ว');
+  } else {
+    state.tasks.push({ id: uid(), ...data, owner: editingOwner, doneBy: [], createdAt: Date.now() });
+    toast(editingOwner === 'all' ? '📢 ประกาศงานให้ทุกคนแล้ว' : '✨ เพิ่มงานใหม่แล้ว');
+  }
+  save(); closeModal('taskModal'); refresh();
+});
+function deleteTask(id){
+  const i = state.tasks.findIndex(x => x.id === id); if(i < 0) return;
+  const [t] = state.tasks.splice(i, 1); save(); refresh(); haptic(25);
+  toast('🗑️ ลบงานแล้ว', 'info', { label:'เลิกทำ', fn:() => { state.tasks.splice(i, 0, t); save(); refresh(); } });
+}
+
+// ================== SHARE (LINE) ==================
+function buildShareText(){
+  const id = currentUser.id, s = userStats(id);
+  const pend = userTasks(id).filter(t => !isDone(t,id)).sort((a,b) => (a.due || '9999').localeCompare(b.due || '9999'));
+  let txt = `📚 สรุปงานจาก pk STUDENT\n👤 ${currentUser.name}\n🗓️ ${new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}\n\n`;
+  txt += `✅ ความคืบหน้า: ${s.done}/${s.total} งาน (${s.pct}%)\n⏳ งานค้าง: ${s.pending} งาน${s.overdue ? ` (เลยกำหนด ${s.overdue} งาน)` : ''}\n`;
+  if(pend.length){
+    txt += `\n📌 รายการงานที่ต้องทำ\n`;
+    pend.forEach((t,i) => {
+      let due = '';
+      if(t.due){ const n = daysUntil(t.due); due = n < 0 ? ` ⚠️เลยกำหนด ${-n} วัน` : n === 0 ? ' ⏰ส่งวันนี้' : n === 1 ? ' ⏰ส่งพรุ่งนี้' : ` 📅ส่ง ${fmtDate(t.due)}`; }
+      txt += `${i+1}. ${PRIORITY[t.priority].icon} [${t.subject}] ${t.title}${due}\n`;
+    });
+  } else txt += `\n🎉 ไม่มีงานค้างแล้ว เคลียร์หมด!\n`;
+  return txt + `\n💪 สู้ ๆ นะทุกคน!`;
+}
+function openShare(){ if(!currentUser) return; $('#shareText').value = buildShareText(); openModal('shareModal'); }
+async function copyShare(){
+  const txt = $('#shareText').value;
+  try { await navigator.clipboard.writeText(txt); }
+  catch(e){ $('#shareText').select(); try { document.execCommand('copy'); } catch(_){} }
+  toast('📋 คัดลอกแล้ว นำไปวางใน LINE ได้เลย');
+}
+function lineShare(){ window.open('https://line.me/R/msg/text/?' + encodeURIComponent($('#shareText').value), '_blank'); }
+
+// ================== ADMIN ==================
+function openAdminLogin(){
+  $('#adminPassInput').value = '';
+  $('#defaultPassHint').classList.toggle('hidden', state.adminPass !== '1234');
+  openModal('loginModal');
+  setTimeout(() => $('#adminPassInput').focus(), 250);
+}
+$('#loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = $('#adminPassInput');
+  if(normPass(input.value) === normPass(state.adminPass)){
+    input.value = ''; closeModal('loginModal');
+    show('adminScreen'); switchTab('members'); renderAdmin();
+    toast('🛡️ เข้าสู่ระบบแอดมินแล้ว','info');
+  } else {
+    const box = $('#loginModal .modal-box');
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+    toast('รหัสผ่านไม่ถูกต้อง','error'); input.select();
+  }
+});
+function exitAdmin(){ renderProfiles(); show('profileScreen'); }
+function switchTab(tab){
+  $$('.tabs .chip').forEach(c => c.classList.toggle('active', c.dataset.tab === tab));
+  $$('.tab-panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== tab));
+}
+function renderAdmin(){
+  renderAvatarPick();
+  $('#dbInfo').textContent = (DB.db ? '🗄️ ฐานข้อมูล: IndexedDB (ในเครื่อง)' : '⚠️ ฐานข้อมูล: โหมดสำรอง (localStorage/หน่วยความจำ)') + ` · ${state.profiles.length} สมาชิก · ${state.tasks.length} งาน · ${state.tasks.reduce((n,t) => n + t.doneBy.length, 0)} รายการเสร็จ`;
+  $('#memberList').innerHTML = state.profiles.length ? state.profiles.map(p => {
+    const s = userStats(p.id);
+    return `<div class="list-row">
+      <div class="avatar sm">${avatarHtml(p.avatar)}</div>
+      <div class="grow"><div class="b">${esc(p.name)}</div>
+        <small class="muted">เสร็จ ${s.done}/${s.total} · ค้าง ${s.pending}${s.overdue ? ` · เลยกำหนด ${s.overdue}` : ''}</small></div>
+      <button class="mini" data-action="pick-photo" data-target="${p.id}" title="เปลี่ยนรูปโปรไฟล์">📷</button>
+      <button class="mini" data-action="del-profile" data-id="${p.id}" title="ลบสมาชิก">🗑️</button>
+    </div>`;
+  }).join('') : '<div class="empty">ยังไม่มีสมาชิก</div>';
+
+  const n = state.profiles.length;
+  const shared = state.tasks.filter(t => t.owner === 'all').sort((a,b) => (a.due || '9999').localeCompare(b.due || '9999'));
+  $('#sharedList').innerHTML = shared.length ? shared.map(t => {
+    const c = t.doneBy.filter(id => state.profiles.some(p => p.id === id)).length;
+    const pct = n ? Math.round(c / n * 100) : 0;
+    return `<div class="list-row">
+      <div class="grow">
+        <div class="task-top"><span class="tag subject">${esc(t.subject)}</span><span class="tag ${t.priority}">${PRIORITY[t.priority].icon} ${PRIORITY[t.priority].label}</span></div>
+        <div class="b">${esc(t.title)}</div>
+        ${dueLabel(t,false)}
+        <div class="mini-bar"><div style="width:${pct}%"></div></div>
+        <small class="muted">ทำเสร็จแล้ว ${c}/${n} คน</small>
+      </div>
+      <div class="task-actions">
+        <button class="mini" data-action="edit" data-id="${t.id}">✏️</button>
+        <button class="mini" data-action="delete" data-id="${t.id}">🗑️</button>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty">ยังไม่มีงานที่ประกาศ</div>';
+
+  const anns = [...state.announcements].sort((a,b) => b.date - a.date);
+  $('#announceList').innerHTML = anns.length ? anns.map(a =>
+    `<div class="list-row"><div class="grow" style="white-space:pre-wrap;word-break:break-word">${esc(a.text)}
+      <small class="muted" style="display:block">🕒 ${new Date(a.date).toLocaleString('th-TH')}</small></div>
+      <button class="mini" data-action="del-announce" data-id="${a.id}">🗑️</button></div>`).join('')
+    : '<div class="empty">ยังไม่มีประกาศ</div>';
+}
+$('#profileForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const p = addProfile($('#newProfileName').value);
+  if(!p) return;
+  $('#newProfileName').value = '';
+  renderAdmin(); toast(`👋 เพิ่ม ${p.name} แล้ว`);
+});
+async function deleteProfile(id){
+  const p = state.profiles.find(x => x.id === id);
+  if(!p) return;
+  if(!(await askConfirm(`ลบสมาชิก "${p.name}" และงานส่วนตัวทั้งหมดของเขาใช่ไหม?`))) return;
+  state.profiles = state.profiles.filter(x => x.id !== id);
+  state.tasks = state.tasks.filter(t => t.owner !== id);
+  state.tasks.forEach(t => t.doneBy = t.doneBy.filter(u => u !== id));
+  save(); renderAdmin(); toast('🗑️ ลบสมาชิกแล้ว','info');
+}
+$('#announceForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const text = $('#announceText').value.trim();
+  if(!text){ toast('กรุณาพิมพ์ข้อความประกาศ','error'); return; }
+  state.announcements.push({ id: uid(), text, date: Date.now() });
+  save(); $('#announceText').value = ''; renderAdmin(); toast('📣 โพสต์ประกาศแล้ว');
+});
+async function deleteAnnounce(id){
+  if(!(await askConfirm('ลบประกาศนี้ใช่ไหม?'))) return;
+  state.announcements = state.announcements.filter(a => a.id !== id);
+  save(); renderAdmin(); toast('🗑️ ลบประกาศแล้ว','info');
+}
+$('#passForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const p = normPass($('#newPass').value);
+  if(p.length < 4){ toast('รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร','error'); return; }
+  state.adminPass = p; save(); $('#newPass').value = '';
+  toast('🔑 เปลี่ยนรหัสผ่านเรียบร้อย');
+});
+async function resetAll(){
+  if(!(await askConfirm('⚠️ ลบข้อมูลทั้งหมดใช่ไหม? การกระทำนี้กู้คืนไม่ได้'))) return;
+  if(!(await askConfirm('ยืนยันอีกครั้ง: ลบสมาชิก งาน และประกาศทั้งหมด?'))) return;
+  const theme = state.theme;
+  state = defaultState(); state.theme = theme; save();
+  currentUser = null; exitAdmin(); toast('ล้างข้อมูลทั้งหมดแล้ว','info');
+}
+
+// ================== DUE ALERT ==================
+function renderDueAlert(){
+  const box = $('#dueAlert'); if(!box || !currentUser) return;
+  const list = userTasks(currentUser.id)
+    .filter(t => !isDone(t, currentUser.id) && t.due && daysUntil(t.due) <= 1)
+    .sort((a,b) => a.due.localeCompare(b.due));
+  if(!list.length){ box.classList.add('hidden'); box.innerHTML = ''; return; }
+  box.classList.remove('hidden');
+  box.innerHTML = `<div class="b">🔔 งานที่ต้องรีบทำ (${list.length})</div>` + list.map(t => {
+    const n = daysUntil(t.due);
+    const tag = n < 0 ? `⚠️ เลยกำหนด ${-n} วัน` : n === 0 ? '⏰ ส่งวันนี้' : '⏰ ส่งพรุ่งนี้';
+    const color = n < 0 ? 'var(--high)' : 'var(--mid)';
+    return `<div class="due-row"><span>${esc(t.title)}${t.subject ? ' · ' + esc(t.subject) : ''}</span><span class="due-tag" style="color:${color}">${tag}</span></div>`;
+  }).join('');
+}
+
+// ================== BACKUP ==================
+function exportData(){
+  const { adminPass, ...rest } = state;
+  const txt = JSON.stringify({ app:'pk-student', version:2.3, data:rest });
+  const ta = $('#backupText'); ta.value = txt; ta.focus(); ta.select();
+  let copied = false;
+  try { copied = document.execCommand('copy'); } catch(e) {}
+  toast(copied ? '📋 คัดลอกข้อมูลสำรองแล้ว นำไปวางเก็บไว้ได้เลย' : 'สร้างข้อมูลสำรองแล้ว กรุณาคัดลอกข้อความในช่อง', 'info');
+}
+async function importData(){
+  const raw = $('#backupText').value.trim();
+  if(!raw){ toast('กรุณาวางข้อความสำรองข้อมูลในช่องก่อน', 'error'); return; }
+  let d;
+  try {
+    const obj = JSON.parse(raw);
+    d = obj && obj.data ? obj.data : obj;
+    if(!d || typeof d !== 'object' || !Array.isArray(d.profiles) || !Array.isArray(d.tasks)) throw new Error('bad');
+  } catch(e){ toast('ข้อมูลสำรองไม่ถูกต้อง ตรวจสอบว่าคัดลอกมาครบ', 'error'); return; }
+  if(!(await askConfirm(`กู้คืนข้อมูล (${d.profiles.length} สมาชิก, ${d.tasks.length} งาน) ข้อมูลปัจจุบันจะถูกแทนที่ ยืนยันไหม?`))) return;
+  state = normalizeState({ ...d, adminPass: state.adminPass, theme: state.theme });
+  save();
+  currentUser = null; applyTheme(); exitAdmin();
+  toast('✅ กู้คืนข้อมูลเรียบร้อย');
+}
+
+// ================== EVENTS ==================
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if(!el) return;
+  const id = el.dataset.id;
+  const actions = {
+    'theme': toggleTheme,
+    'pick-profile': () => loginAs(id),
+    'open-new-profile': openNewProfile,
+    'open-admin-login': openAdminLogin,
+    'logout': logout,
+    'add-task': () => openTaskModal(null, currentUser && currentUser.id),
+    'add-shared': () => {
+      if(!state.profiles.length) toast('ยังไม่มีสมาชิก แต่ประกาศงานไว้ก่อนได้','info');
+      openTaskModal(null, 'all');
+    },
+    'toggle': () => toggleTask(id, el),
+    'edit': () => { const t = state.tasks.find(x => x.id === id); if(t) openTaskModal(t); },
+    'delete': () => deleteTask(id),
+    'share': openShare,
+    'copy-share': copyShare,
+    'line-share': lineShare,
+    'new-quote': showQuote,
+    'close-modal': () => closeModal(el.closest('.modal').id),
+    'confirm-yes': () => answerConfirm(true),
+    'confirm-no': () => answerConfirm(false),
+    'tab': () => switchTab(el.dataset.tab),
+    'status': () => { filter.status = el.dataset.status; renderStatusChips(); renderTasks(); },
+    'pick-avatar': () => { selectedAvatar = el.dataset.avatar; renderAvatarPick(); },
+    'pick-prio': () => setPrio(el.dataset.p),
+    'del-profile': () => deleteProfile(id),
+    'del-announce': () => deleteAnnounce(id),
+    'export-data': exportData,
+    'import-data': importData,
+    'reset-all': resetAll,
+    'exit-admin': exitAdmin,
+    'open-sync': () => { $('#roomCodeInput').value = state.roomCode || ''; openModal('syncModal'); },
+    'due-quick': () => { const d = new Date(); d.setDate(d.getDate() + (+el.dataset.d)); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); $('#fDue').value = d.toISOString().slice(0,10); haptic(8); },
+    'add-on-date': () => { openTaskModal(null, currentUser.id); $('#fDue').value = el.dataset.date; },
+    'pick-photo': () => { avatarTarget = el.dataset.target; $('#avatarFile').click(); },
+    'export-file': exportFile,
+    'pick-file': () => $('#importFile').click(),
+    'install': () => { if(deferredInstall){ deferredInstall.prompt(); deferredInstall = null; } $('#menuInstall').classList.add('hidden'); }
+  };
+  
+  const fn = actions[el.dataset.action];
+  if(fn){
+    try { 
+      fn(); 
+      if(el.closest('#menuModal')) closeModal('menuModal');
+    }
+    catch(err){ console.error(err); toast('เกิดข้อผิดพลาด: ' + err.message, 'error'); }
+  }
+});
+$$('.modal').forEach(m => m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); }));
+document.addEventListener('keydown', e => { if(e.key === 'Escape') $$('.modal.open').forEach(m => closeModal(m.id)); });
+$('#searchInput').addEventListener('input', e => { filter.search = e.target.value.trim(); renderTasks(); });
+$('#subjectFilter').addEventListener('change', e => { filter.subject = e.target.value; renderTasks(); });
+
+// ================== MOBILE & TOUCH GESTURES ==================
+const haptic = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch(e) {} };
+$('#sortSelect').addEventListener('change', e => { filter.sort = e.target.value; renderTasks(); });
+
+// Swipe actions on tasks
+(() => {
+  const L = $('#taskList'); let el = null, x0 = 0, y0 = 0, dx = 0, lock = null;
+  L.addEventListener('touchstart', e => {
+    const t = e.target.closest('.task');
+    if(!t || e.target.closest('a,.mini')){ el = null; return; }
+    el = t; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; dx = 0; lock = null;
+  }, {passive:true});
+  L.addEventListener('touchmove', e => {
+    if(!el) return;
+    dx = e.touches[0].clientX - x0; const dy = e.touches[0].clientY - y0;
+    if(lock === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) lock = Math.abs(dx) > Math.abs(dy) * 1.5;
+    if(!lock) return;
+    el.classList.add('swiping'); el.style.transform = `translateX(${dx}px)`;
+    el.classList.toggle('sw-r', dx > 80); el.classList.toggle('sw-l', dx < -80);
+  }, {passive:true});
+  L.addEventListener('touchend', () => {
+    if(!el) return;
+    const t = el; el = null;
+    t.classList.remove('swiping','sw-r','sw-l'); t.style.transform = '';
+    if(lock && Math.abs(dx) > 100){
+      const target = dx > 0 ? t.querySelector('.check') : t.querySelector('[data-action="delete"]');
+      if(target) target.click();
+    }
+  });
+})();
+
+// Swipe month in calendar
+(() => {
+  let x = 0; const c = $('#calCells');
+  c.addEventListener('touchstart', e => { x = e.touches[0].clientX; }, {passive:true});
+  c.addEventListener('touchend', e => { const d = e.changedTouches[0].clientX - x; if(Math.abs(d) > 60) changeCalMonth(d < 0 ? 1 : -1); });
+})();
+
+// Drag down bottom sheet modal
+$$('.modal-box').forEach(b => {
+  let y0 = null, dy = 0;
+  b.addEventListener('touchstart', e => {
+    if(innerWidth >= 640) return;
+    y0 = (e.touches[0].clientY - b.getBoundingClientRect().top < 44) ? e.touches[0].clientY : null; dy = 0;
+  }, {passive:true});
+  b.addEventListener('touchmove', e => {
+    if(y0 === null) return;
+    dy = Math.max(0, e.touches[0].clientY - y0); b.style.transition = 'none'; b.style.transform = `translateY(${dy}px)`;
+  }, {passive:true});
+  b.addEventListener('touchend', () => {
+    if(y0 === null) return;
+    b.style.transition = ''; b.style.transform = ''; y0 = null;
+    if(dy > 100) closeModal(b.closest('.modal').id);
+  });
+});
+
+// สถิติ + อันดับเพื่อน + เหรียญรางวัล (NEW v2.3)
+function renderInsights(){
+  if(!currentUser) return;
+  const id = currentUser.id, me = userStats(id);
+  const dkey = ts => { const d = new Date(ts); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  const times = state.tasks.map(t => isDone(t,id) && t.doneAt && t.doneAt[id]).filter(Boolean);
+  const days = new Set(times.map(dkey));
+  let streak = 0; const d = new Date(); if(!days.has(dkey(d))) d.setDate(d.getDate() - 1);
+  while(days.has(dkey(d))){ streak++; d.setDate(d.getDate() - 1); }
+  const week = times.filter(x => x > Date.now() - 7 * 864e5).length;
+  const subj = {}; userTasks(id).forEach(t => { const s = subj[t.subject] = subj[t.subject] || {d:0, n:0}; s.n++; if(isDone(t,id)) s.d++; });
+  const bar = p => `<div class="mini-bar"><div style="width:${p}%"></div></div>`;
+  const subjRows = Object.entries(subj).sort((a,b) => b[1].n - a[1].n).map(([k,v]) =>
+    `<div style="padding:8px 0"><div style="display:flex;justify-content:space-between"><span class="b">${esc(k)}</span><small class="muted">${v.d}/${v.n}</small></div>${bar(Math.round(v.d / v.n * 100))}</div>`).join('') || '<div class="empty">ยังไม่มีงาน</div>';
+  const medals = ['🥇','🥈','🥉'];
+  const friends = state.profiles.map(p => ({p, s:userStats(p.id)})).sort((a,b) => b.s.pct - a.s.pct || b.s.done - a.s.done)
+    .map((x,i) => `<div class="list-row ${x.p.id === id ? 'me' : ''}"><div class="rank">${x.s.done && medals[i] || i + 1}</div><div class="avatar sm">${avatarHtml(x.p.avatar)}</div>
+      <div class="grow"><div class="b">${esc(x.p.name)}</div>${bar(x.s.pct)}<small class="muted">เสร็จ ${x.s.done}/${x.s.total} · ค้าง ${x.s.pending}</small></div><div class="b">${x.s.pct}%</div></div>`).join('');
+  
+  // Badges grid
+  const userBadges = currentUser.badges || [];
+  const badgeCards = BADGES.map(b => {
+    const isUnlocked = userBadges.includes(b.id);
+    return `<div class="badge-card ${isUnlocked ? 'unlocked' : ''}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>`;
+  }).join('');
+
+  $('#statsSection').innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="num" style="color:var(--mid)">🔥 ${streak}</div><div class="lbl">วันติดต่อกัน</div></div>
+      <div class="stat"><div class="num" style="color:var(--low)">${week}</div><div class="lbl">เสร็จใน 7 วัน</div></div>
+      <div class="stat"><div class="num" style="color:var(--primary)">${me.pct}%</div><div class="lbl">ภาพรวม</div></div>
+    </div>
+    <div class="card">
+      <div class="b">🏆 เหรียญรางวัลของคุณ (${userBadges.length}/${BADGES.length})</div>
+      <div class="badge-grid">${badgeCards}</div>
+    </div>
+    <div class="card"><div class="b">📚 ความคืบหน้าแต่ละวิชา</div>${subjRows}</div>
+    <div class="card"><div class="b">👥 เพื่อน ๆ ในห้อง</div>${friends}</div>`;
+}
+
+// Avatar upload & processing
+let avatarTarget = 'new';
+function readAvatar(file){
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const S = 160, c = document.createElement('canvas'); c.width = c.height = S;
+      const m = Math.min(img.width, img.height);
+      c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, S, S);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('อ่านไฟล์รูปไม่ได้')); };
+    img.src = url;
+  });
+}
+$('#avatarFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if(!f) return;
+  const a = await readAvatar(f);
+  if(avatarTarget === 'new'){ selectedAvatar = a; renderAvatarPick(); return; }
+  const p = state.profiles.find(x => x.id === (avatarTarget === 'me' ? currentUser && currentUser.id : avatarTarget));
+  if(!p) return;
+  p.avatar = a; save(); refresh(); toast('📷 เปลี่ยนรูปโปรไฟล์แล้ว');
+});
+
+// Export JSON file
+function exportFile(){
+  const { adminPass, ...rest } = state;
+  const blob = new Blob([JSON.stringify({ app:'pk-student', version:2.3, exportedAt:Date.now(), data:rest }, null, 1)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `pk-student-${todayStr()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  toast('⬇️ ดาวน์โหลดไฟล์สำรองแล้ว', 'info');
+}
+$('#importFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if(!f) return;
+  $('#backupText').value = await f.text(); importData();
+});
+
+// App installation & online status
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; $('#menuInstall').classList.remove('hidden'); });
+window.addEventListener('offline', () => toast('📴 ออฟไลน์ — ข้อมูลยังบันทึกในเครื่องตามปกติ', 'info'));
+window.addEventListener('online', () => toast('📶 กลับมาออนไลน์แล้ว', 'info'));
+window.addEventListener('error', e => toast('เกิดข้อผิดพลาด: ' + (e.message || 'ไม่ทราบสาเหตุ'), 'error'));
+window.addEventListener('unhandledrejection', e => toast('เกิดข้อผิดพลาด: ' + (e.reason?.message || e.reason || 'ไม่ทราบสาเหตุ'), 'error'));
+
+// ================== INIT ==================
+applyTheme();
+renderAvatarPick();
+renderProfiles();
+show('profileScreen');
+bootDB().then(() => {
+  applyTheme(); renderAvatarPick();
+  if(!currentUser && !$('#profileScreen').classList.contains('hidden') && !$('.modal.open')){
+    renderProfiles();
+    const last = state.profiles.find(p => p.id === state.lastUser);
+    if(last) loginAs(last.id);
+  }
+  if(!store.ok && !DB.db){
+    setTimeout(() => toast('⚠️ เบราว์เซอร์นี้บล็อกการบันทึกข้อมูล ข้อมูลจะหายเมื่อปิดหน้า แนะนำให้บันทึกเป็นไฟล์ .html แล้วเปิดด้วย Chrome','error'), 400);
+  }
+});
+</script>
+</body>
+</html>
+
+
+

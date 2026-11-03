@@ -1,0 +1,11 @@
+# Local credentials and environment-specific config
+.env
+.env.*
+.vercel/
+.supabase/
+
+# Local development output
+node_modules/
+*.log
+*.tmp
+*.local
