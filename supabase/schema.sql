@@ -36,28 +36,30 @@ alter table public.pk_rooms enable row level security;
 alter table public.pk_room_members enable row level security;
 alter table public.pk_room_state enable row level security;
 
-create or replace function public.pk_is_room_member(p_room_id uuid)
-returns boolean language sql stable security definer set search_path = public, auth, extensions
+create schema if not exists private;
+
+create or replace function private.pk_is_room_member(p_room_id uuid)
+returns boolean language sql stable security definer set search_path = pg_catalog, public, auth, extensions
 as $$ select exists(select 1 from public.pk_room_members m where m.room_id=p_room_id and m.auth_user_id=auth.uid()) $$;
 
-create or replace function public.pk_is_room_admin(p_room_id uuid)
-returns boolean language sql stable security definer set search_path = public, auth, extensions
+create or replace function private.pk_is_room_admin(p_room_id uuid)
+returns boolean language sql stable security definer set search_path = pg_catalog, public, auth, extensions
 as $$ select exists(select 1 from public.pk_room_members m where m.room_id=p_room_id and m.auth_user_id=auth.uid() and m.role='admin') $$;
 
 drop policy if exists pk_rooms_member_read on public.pk_rooms;
-create policy pk_rooms_member_read on public.pk_rooms for select to authenticated using (public.pk_is_room_member(id));
+create policy pk_rooms_member_read on public.pk_rooms for select to authenticated using (private.pk_is_room_member(id));
 drop policy if exists pk_members_read on public.pk_room_members;
-create policy pk_members_read on public.pk_room_members for select to authenticated using (auth_user_id=auth.uid() or public.pk_is_room_admin(room_id));
+create policy pk_members_read on public.pk_room_members for select to authenticated using (auth_user_id=(select auth.uid()) or private.pk_is_room_admin(room_id));
 drop policy if exists pk_state_member_read on public.pk_room_state;
-create policy pk_state_member_read on public.pk_room_state for select to authenticated using (public.pk_is_room_member(room_id));
+create policy pk_state_member_read on public.pk_room_state for select to authenticated using (private.pk_is_room_member(room_id));
 
 revoke all on public.pk_rooms, public.pk_room_members, public.pk_room_state from anon, authenticated;
 grant select on public.pk_rooms, public.pk_room_members, public.pk_room_state to authenticated;
 
-create or replace function public.pk_create_room(
+create or replace function private.pk_create_room(
   p_room_name text, p_room_code text, p_admin_pin text, p_admin_profile_id text,
   p_admin_name text, p_payload jsonb
-) returns uuid language plpgsql security definer set search_path = public, auth, extensions
+) returns uuid language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare v_room_id uuid; v_user_id uuid := auth.uid(); v_code text := upper(trim(p_room_code));
 begin
@@ -75,8 +77,8 @@ begin
   return v_room_id;
 end $$;
 
-create or replace function public.pk_join_room(p_room_code text,p_display_name text,p_pin text)
-returns jsonb language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_join_room(p_room_code text,p_display_name text,p_pin text)
+returns jsonb language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare v_uid uuid := auth.uid(); v_room public.pk_rooms%rowtype; v_member public.pk_room_members%rowtype;
 begin
@@ -96,8 +98,8 @@ begin
   return jsonb_build_object('room_id',v_room.id,'profile_id',v_member.profile_id,'role','student');
 end $$;
 
-create or replace function public.pk_admin_login(p_room_code text,p_admin_name text,p_pin text)
-returns jsonb language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_admin_login(p_room_code text,p_admin_name text,p_pin text)
+returns jsonb language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare v_uid uuid := auth.uid(); v_room public.pk_rooms%rowtype; v_member public.pk_room_members%rowtype;
 begin
@@ -115,42 +117,42 @@ begin
   return jsonb_build_object('room_id',v_room.id,'profile_id',v_member.profile_id,'role','admin');
 end $$;
 
-create or replace function public.pk_register_member(p_room_id uuid,p_profile_id text,p_display_name text,p_pin text)
-returns void language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_register_member(p_room_id uuid,p_profile_id text,p_display_name text,p_pin text)
+returns void language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 begin
-  if not public.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
+  if not private.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
   if length(trim(p_pin)) < 4 or length(trim(p_pin)) > 12 then raise exception 'Member PIN must be 4 to 12 characters'; end if;
   insert into public.pk_room_members(room_id,profile_id,display_name,role,pin_hash)
   values(p_room_id,p_profile_id,trim(p_display_name),'student',extensions.crypt(trim(p_pin),extensions.gen_salt('bf')))
   on conflict(room_id,profile_id) do update set display_name=excluded.display_name,pin_hash=excluded.pin_hash,auth_user_id=null;
 end $$;
 
-create or replace function public.pk_reset_member_access(p_room_id uuid,p_profile_id text,p_new_pin text)
-returns void language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_reset_member_access(p_room_id uuid,p_profile_id text,p_new_pin text)
+returns void language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 begin
-  if not public.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
+  if not private.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
   if length(trim(p_new_pin)) < 4 or length(trim(p_new_pin)) > 12 then raise exception 'Member PIN must be 4 to 12 characters'; end if;
   update public.pk_room_members set auth_user_id=null,pin_hash=extensions.crypt(trim(p_new_pin),extensions.gen_salt('bf'))
   where room_id=p_room_id and profile_id=p_profile_id and role='student';
   if not found then raise exception 'Member was not found'; end if;
 end $$;
 
-create or replace function public.pk_remove_member(p_room_id uuid,p_profile_id text)
-returns void language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_remove_member(p_room_id uuid,p_profile_id text)
+returns void language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 begin
-  if not public.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
+  if not private.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
   delete from public.pk_room_members where room_id=p_room_id and profile_id=p_profile_id and role='student';
 end $$;
 
-create or replace function public.pk_publish_room_state(p_room_id uuid,p_payload jsonb)
-returns void language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_publish_room_state(p_room_id uuid,p_payload jsonb)
+returns void language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare v_old jsonb; v_profiles jsonb; v_tasks jsonb; v_payload jsonb;
 begin
-  if not public.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
+  if not private.pk_is_room_admin(p_room_id) then raise exception 'Admin access required'; end if;
   select payload into v_old from public.pk_room_state where room_id=p_room_id for update;
   select coalesce(jsonb_agg(n.obj || jsonb_build_object(
       'points',coalesce(o.obj->'points',n.obj->'points','0'::jsonb),
@@ -167,12 +169,12 @@ begin
     into v_tasks
     from jsonb_array_elements(coalesce(p_payload->'tasks','[]'::jsonb)) with ordinality n(obj,ord)
     left join lateral (select x.obj from jsonb_array_elements(coalesce(v_old->'tasks','[]'::jsonb)) x(obj) where x.obj->>'id'=n.obj->>'id' limit 1) o on true;
-  v_payload:=jsonb_build_object('profiles',v_profiles,'tasks',v_tasks,'announcements',coalesce(p_payload->'announcements','[]'::jsonb));
+  v_payload:=(coalesce(p_payload,'{}'::jsonb)-'adminPass') || jsonb_build_object('profiles',v_profiles,'tasks',v_tasks);
   update public.pk_room_state set payload=v_payload,updated_at=now() where room_id=p_room_id;
 end $$;
 
-create or replace function public.pk_set_task_completion(p_room_id uuid,p_task_id text,p_done boolean)
-returns jsonb language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_set_task_completion(p_room_id uuid,p_task_id text,p_done boolean)
+returns jsonb language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare
   v_member public.pk_room_members%rowtype; v_state jsonb; v_tasks jsonb; v_profiles jsonb;
@@ -211,8 +213,8 @@ begin
   return (select payload from public.pk_room_state where room_id=p_room_id);
 end $$;
 
-create or replace function public.pk_award_pomodoro(p_room_id uuid)
-returns jsonb language plpgsql security definer set search_path = public, auth, extensions
+create or replace function private.pk_award_pomodoro(p_room_id uuid)
+returns jsonb language plpgsql security definer set search_path = pg_catalog, public, auth, extensions
 as $$
 declare v_member public.pk_room_members%rowtype; v_state jsonb; v_profiles jsonb; v_profile jsonb; v_ix integer;
 begin
@@ -235,6 +237,61 @@ begin
   return (select payload from public.pk_room_state where room_id=p_room_id);
 end $$;
 
+-- Keep privileged function bodies in a schema that is not exposed through the Data API.
+-- Public functions are invoker wrappers so PostgREST can reach only the intended RPCs.
+create or replace function public.pk_create_room(
+  p_room_name text, p_room_code text, p_admin_pin text, p_admin_profile_id text,
+  p_admin_name text, p_payload jsonb
+) returns uuid language sql security invoker set search_path = ''
+as $$ select private.pk_create_room($1,$2,$3,$4,$5,$6) $$;
+
+create or replace function public.pk_join_room(p_room_code text,p_display_name text,p_pin text)
+returns jsonb language sql security invoker set search_path = ''
+as $$ select private.pk_join_room($1,$2,$3) $$;
+
+create or replace function public.pk_admin_login(p_room_code text,p_admin_name text,p_pin text)
+returns jsonb language sql security invoker set search_path = ''
+as $$ select private.pk_admin_login($1,$2,$3) $$;
+
+create or replace function public.pk_register_member(p_room_id uuid,p_profile_id text,p_display_name text,p_pin text)
+returns void language sql security invoker set search_path = ''
+as $$ select private.pk_register_member($1,$2,$3,$4) $$;
+
+create or replace function public.pk_reset_member_access(p_room_id uuid,p_profile_id text,p_new_pin text)
+returns void language sql security invoker set search_path = ''
+as $$ select private.pk_reset_member_access($1,$2,$3) $$;
+
+create or replace function public.pk_remove_member(p_room_id uuid,p_profile_id text)
+returns void language sql security invoker set search_path = ''
+as $$ select private.pk_remove_member($1,$2) $$;
+
+create or replace function public.pk_publish_room_state(p_room_id uuid,p_payload jsonb)
+returns void language sql security invoker set search_path = ''
+as $$ select private.pk_publish_room_state($1,$2) $$;
+
+create or replace function public.pk_set_task_completion(p_room_id uuid,p_task_id text,p_done boolean)
+returns jsonb language sql security invoker set search_path = ''
+as $$ select private.pk_set_task_completion($1,$2,$3) $$;
+
+create or replace function public.pk_award_pomodoro(p_room_id uuid)
+returns jsonb language sql security invoker set search_path = ''
+as $$ select private.pk_award_pomodoro($1) $$;
+
+revoke all on schema private from public, anon, authenticated;
+grant usage on schema private to authenticated;
+revoke all on function private.pk_is_room_member(uuid) from public, anon, authenticated;
+revoke all on function private.pk_is_room_admin(uuid) from public, anon, authenticated;
+revoke all on function private.pk_create_room(text,text,text,text,text,jsonb) from public, anon, authenticated;
+revoke all on function private.pk_join_room(text,text,text) from public, anon, authenticated;
+revoke all on function private.pk_admin_login(text,text,text) from public, anon, authenticated;
+revoke all on function private.pk_register_member(uuid,text,text,text) from public, anon, authenticated;
+revoke all on function private.pk_reset_member_access(uuid,text,text) from public, anon, authenticated;
+revoke all on function private.pk_remove_member(uuid,text) from public, anon, authenticated;
+revoke all on function private.pk_publish_room_state(uuid,jsonb) from public, anon, authenticated;
+revoke all on function private.pk_set_task_completion(uuid,text,boolean) from public, anon, authenticated;
+revoke all on function private.pk_award_pomodoro(uuid) from public, anon, authenticated;
+grant execute on all functions in schema private to authenticated;
+
 revoke all on function public.pk_create_room(text,text,text,text,text,jsonb) from public, anon;
 revoke all on function public.pk_join_room(text,text,text) from public, anon;
 revoke all on function public.pk_admin_login(text,text,text) from public, anon;
@@ -253,4 +310,12 @@ grant execute on function public.pk_remove_member(uuid,text) to authenticated;
 grant execute on function public.pk_publish_room_state(uuid,jsonb) to authenticated;
 grant execute on function public.pk_set_task_completion(uuid,text,boolean) to authenticated;
 grant execute on function public.pk_award_pomodoro(uuid) to authenticated;
+
+do $$
+begin
+  if exists(select 1 from pg_publication where pubname='supabase_realtime')
+     and not exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and schemaname='public' and tablename='pk_room_state') then
+    execute 'alter publication supabase_realtime add table public.pk_room_state';
+  end if;
+end $$;
 

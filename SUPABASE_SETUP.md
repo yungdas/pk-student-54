@@ -2,15 +2,15 @@
 
 ระบบซิงก์ของห้อง 5/4 ใช้ Supabase Auth แบบ anonymous เพื่อให้สมาชิกเข้าด้วยรหัสห้องและ PIN โดยไม่ต้องกรอกอีเมล
 
-หน้าเริ่มต้นมีปุ่ม **เชื่อมต่อห้องออนไลน์** สำหรับใส่ Project URL และ Publishable key แล้ว สมาชิกใส่รหัสห้อง ชื่อ และ PIN ส่วนแอดมินสร้างห้องหรือเข้าสู่ระบบแอดมินจากหน้านี้ได้ เมื่อสร้างห้อง ระบบจะสร้าง PIN สมาชิกให้แต่ละโปรไฟล์และแสดงให้แอดมินบันทึก/ส่งต่อ
+หน้าเริ่มต้นมีปุ่ม **เชื่อมต่อห้องออนไลน์** สมาชิกใส่รหัสห้อง ชื่อ และ PIN ส่วนแอดมินสร้างห้องหรือเข้าสู่ระบบแอดมินจากหน้านี้ได้ เมื่อสร้างห้อง ระบบจะสร้าง PIN สมาชิกให้แต่ละโปรไฟล์และแสดงให้แอดมินบันทึก/ส่งต่อ ถ้าเปลี่ยน Supabase project ให้ใส่ Project URL และ Publishable key ใหม่ในหน้าตั้งค่า
 
 ## ตั้งค่าโปรเจกต์
 
 1. สร้าง Supabase project ของห้อง 5/4
 2. เปิด **Authentication → Sign In / Providers → Anonymous Sign-Ins**
 3. เปิด SQL Editor แล้วรันไฟล์ `supabase/schema.sql`
-4. เปิด **Database → Publications → supabase_realtime** แล้วเพิ่มตาราง `pk_room_state`
-5. คัดลอก Project URL และ Publishable key (หรือ anon key เดิม) จากหน้า API settings มาใส่ในหน้าตั้งค่าของแอป
+4. `supabase/schema.sql` จะเพิ่ม `pk_room_state` เข้า `supabase_realtime` ให้อัตโนมัติ
+5. Project URL และ Publishable key ถูกตั้งเป็นค่าเริ่มต้นในแอปแล้ว ใช้ได้กับเว็บสาธารณะเมื่อเปิด RLS ตาม schema นี้
 
 ห้ามใส่ `service_role` key ใน HTML หรือส่งให้สมาชิก เพราะ key นี้ข้าม RLS ได้
 
@@ -32,7 +32,7 @@
 
 ## Deploy บน Vercel
 
-แอปเป็น static site ไม่ต้อง build: เลือก **Other** เป็น Framework Preset แล้วกำหนด Root Directory เป็นโฟลเดอร์โปรเจกต์นี้ จากนั้น deploy ไฟล์ `index.html` และโฟลเดอร์ `assets/` พร้อมกัน หลัง deploy ให้เปิด URL ของเว็บบนมือถือ กด **เชื่อมต่อห้องออนไลน์** และใส่ Supabase Project URL กับ Publishable key
+แอปเป็น static site ไม่ต้อง build: เลือก **Other** เป็น Framework Preset แล้วกำหนด Root Directory เป็นโฟลเดอร์โปรเจกต์นี้ จากนั้น deploy ไฟล์ `index.html` และโฟลเดอร์ `assets/` พร้อมกัน หลัง deploy ให้เปิด URL ของเว็บบนมือถือ กด **เชื่อมต่อห้องออนไลน์** แล้วเข้าด้วยรหัสห้องและ PIN
 
 ถ้าใช้ Vercel CLI ในเครื่องที่ล็อกอินไว้แล้ว ให้รัน `vercel --prod` จากโฟลเดอร์โปรเจกต์นี้ การ deploy production จะผูกกับโปรเจกต์/โดเมนที่เลือกใน Vercel
 

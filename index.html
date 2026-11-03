@@ -1191,7 +1191,7 @@
 <div class="modal" id="cloudSetupModal">
   <div class="modal-box" style="max-width:520px;max-height:88vh;overflow:auto">
     <div class="modal-head"><h3>☁️ เชื่อมต่อห้อง 5/4</h3><button class="mini" data-action="close-modal">✖</button></div>
-    <p class="muted" style="font-size:13px;margin-bottom:14px">ใส่ Project URL และ Publishable key จาก Supabase หนึ่งครั้งต่ออุปกรณ์</p>
+    <p class="muted" style="font-size:13px;margin-bottom:14px">ตั้งค่า Supabase ของ PK STUDENT ไว้แล้ว ถ้าต้องการเปลี่ยนโปรเจกต์ให้แก้ Project URL และ Publishable key ได้ที่นี่</p>
     <div class="field"><label for="cloudUrl">Supabase Project URL</label><input id="cloudUrl" type="url" inputmode="url" placeholder="https://xxxx.supabase.co" autocomplete="url"></div>
     <div class="field"><label for="cloudKey">Publishable key (หรือ anon key)</label><input id="cloudKey" type="password" autocomplete="off" placeholder="sb_publishable_…"></div>
     <button class="btn btn-ghost btn-block" data-action="save-cloud-config">บันทึกการเชื่อมต่อ</button>
@@ -1366,8 +1366,9 @@ function save(){
 
 const CLOUD_CONFIG_KEY='pkstudent_supabase_config_v1';
 const CLOUD_SESSION_KEY='pkstudent_supabase_room_v1';
+const DEFAULT_CLOUD_CONFIG={url:"https://pjribzymyotaybdblmht.supabase.co",key:"sb_publishable_-GSEw3kbSDCmm2Q4SHzuQg_M1Mb2ddx"};
 let cloudClient=null, cloudRoomId=null, cloudProfileId=null, cloudRole='offline', cloudChannel=null, cloudPublishTimer=null;
-function getCloudConfig(){try{return JSON.parse(localStorage.getItem(CLOUD_CONFIG_KEY)||'null')}catch{return null}}
+function getCloudConfig(){try{return JSON.parse(localStorage.getItem(CLOUD_CONFIG_KEY)||'null')||DEFAULT_CLOUD_CONFIG}catch{return DEFAULT_CLOUD_CONFIG}}
 function setCloudStatus(message,isError=false){const el=$('#cloudStatus');if(el){el.textContent=message;el.style.color=isError?'var(--high)':'var(--muted)'}}
 function saveCloudConfig(){
   const url=$('#cloudUrl').value.trim().replace(/\/+$/,'');const key=$('#cloudKey').value.trim();
